@@ -8,8 +8,8 @@ body {
 }
 
 .tile-container {
-    width: 200px;
-    height: 200px;
+    width: 160px;
+    height: 160px;
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     gap: 0;
@@ -17,7 +17,7 @@ body {
 
 .tile {
     display: inline-block;
-    width: 20px; /* Adjust as needed */
-    height: 20px; /* Adjust as needed */
+    width: 16px; /* Adjust as needed */
+    height: 16px; /* Adjust as needed */
     background-size: cover;
 }

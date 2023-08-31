@@ -1,48 +1,121 @@
-const gridSize = 10;
-const tileWidth = 20;
-const tileHeight = 20;
-
-const tileImages = {
-    empty: 'data/img/empty.png',
-    wall: 'data/img/wall.png',
-    player: 'data/img/player.png'
+let session = {};
+session.tileSize = { x: 20, y: 20 };
+session.viewRange = 10;
+session.screen = {
+  x: (session.viewRange * 2 + 1) * session.tileSize.x,
+  y: (session.viewRange * 2 + 1) * session.tileSize.y, // Fixed the typo here
 };
+session.map = DungeonGenerator.generate({
+  maxRoomSize: 7,
+  minRoomSize: 7,
+  padding: 2,
+  rooms: 25,
+  rows: 41,
+  cols: 61,
+});
+session.tileset = {};
+session.creature = [];
+let buttonSize = 50;
 
-const gameContainer = document.getElementById('game');
-const map = generateMap();
-
-function generateMap() {
-    const map = new Array(gridSize);
-
-    for (let i = 0; i < gridSize; i++) {
-        map[i] = new Array(gridSize).fill('empty');
-    }
-
-    // Create walls
-    for (let i = 0; i < gridSize; i++) {
-        map[0][i] = 'wall';
-        map[i][0] = 'wall';
-        map[gridSize - 1][i] = 'wall';
-        map[i][gridSize - 1] = 'wall';
-    }
-
-    // Place player
-    map[1][1] = 'player';
-
-    return map;
+function moveUp() {
+    session.creature[0].position.y -= 1;
 }
 
-function renderMap() {
-    gameContainer.innerHTML = '';
-
-    for (let y = 0; y < gridSize; y++) {
-        for (let x = 0; x < gridSize; x++) {
-            const tileElement = document.createElement('div');
-            tileElement.className = 'tile';
-            tileElement.style.backgroundImage = `url(${tileImages[map[y][x]]})`;
-            gameContainer.appendChild(tileElement);
-        }
-    }
+function moveLeft() {
+    session.creature[0].position.x -= 1;
 }
 
-renderMap();
+function moveRight() {
+    session.creature[0].position.x += 1;
+}
+
+function moveDown() {
+    session.creature[0].position.y += 1;
+}
+
+function setup() {
+    session.creature[0] = {
+        name: 'player',
+        hp: 100,
+        mp: 0,
+        hunger: 0,
+        position: { x: 15, y: 15 },
+    };
+    
+    createCanvas(session.screen.x, session.screen.y); // Fixed using session.screen.y here
+    session.tileset['player'] = loadImage('data/img/player.png');
+    session.tileset['wall'] = loadImage('data/img/wall.png');
+    session.tileset['empty'] = loadImage('data/img/empty.png');
+    createButton('↑')
+        .position(width / 2 - buttonSize / 2, height - buttonSize * 2)
+        .size(buttonSize, buttonSize)
+        .mousePressed(moveUp);
+
+    createButton('←')
+        .position(width / 2 - buttonSize * 1.5, height - buttonSize)
+        .size(buttonSize, buttonSize)
+        .mousePressed(moveLeft);
+
+    createButton('→')
+        .position(width / 2 + buttonSize / 2, height - buttonSize)
+        .size(buttonSize, buttonSize)
+        .mousePressed(moveRight);
+
+    createButton('↓')
+        .position(width / 2 - buttonSize / 2, height)
+        .size(buttonSize, buttonSize)
+        .mousePressed(moveDown);
+}
+
+function keyDown() 
+{
+}
+
+function keyPressed() {
+    if (keyCode === LEFT_ARROW) {
+      moveLeft();
+    } else if (keyCode === RIGHT_ARROW) {
+      moveRight();
+    } else if (keyCode === UP_ARROW) {
+      moveUp();
+    } else if (keyCode === DOWN_ARROW) {
+      moveDown();
+    }
+}
+  
+
+function draw() 
+{
+  clear();
+  keyDown();
+  let startX = session.creature[0].position.x - session.viewRange;
+  let startY = session.creature[0].position.y - session.viewRange;
+  
+  for (let x = startX; x <= session.creature[0].position.x + session.viewRange; x++) 
+  {
+    for (let y = startY; y <= session.creature[0].position.y + session.viewRange; y++) 
+    {
+      if (x >= 0 && y >= 0 && x < session.map.length && y < session.map[x].length) 
+      {
+        if (session.map[x][y] === 0)
+          image(
+            session.tileset['empty'],
+            (x - startX) * session.tileSize.x,
+            (y - startY) * session.tileSize.y
+          );
+        else if (session.map[x][y] === 1)
+          image(
+            session.tileset['wall'],
+            (x - startX) * session.tileSize.x,
+            (y - startY) * session.tileSize.y
+          );
+      }
+    }
+  }
+  image(
+    session.tileset['player'],
+    session.viewRange * session.tileSize.x,
+    session.viewRange * session.tileSize.y
+  );
+}
+
