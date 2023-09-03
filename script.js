@@ -255,7 +255,7 @@ function loadImages() {
     const imagePromises = session.tilename.map((imageName,i) => {
         const src = 'data/img/' + imageName + '.png';
         return loadImage(src).then((image) => {
-            session.tileset.push(image);
+            session.tileset[i] = image
             session.tilename[imageName] = i
         });
     });

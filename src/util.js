@@ -1,3 +1,30 @@
+function cloneMatrix(matrix) {
+    // Check if the input is a valid matrix (2D array)
+    if (!Array.isArray(matrix) || matrix.length === 0 || !Array.isArray(matrix[0])) {
+        throw new Error('Invalid matrix input');
+    }
+
+    // Get the dimensions of the original matrix
+    const numRows = matrix.length;
+    const numCols = matrix[0].length;
+
+    // Create a new matrix with the same dimensions
+    const clonedMatrix = new Array(numRows);
+    for (let i = 0; i < numRows; i++) {
+        clonedMatrix[i] = new Array(numCols);
+    }
+
+    // Copy the elements from the original matrix to the new one
+    for (let row = 0; row < numRows; row++) {
+        for (let col = 0; col < numCols; col++) {
+            clonedMatrix[row][col] = matrix[row][col];
+        }
+    }
+
+    return clonedMatrix;
+}
+
+
 function matrixReplace(matrix, oldPattern, newPattern) {
     const numRows = matrix.length;
     if (numRows === 0) return matrix; // Empty matrix, nothing to replace
