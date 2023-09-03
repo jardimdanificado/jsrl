@@ -1,23 +1,9 @@
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: black;
+#canvas {
+    border: 1px solid #ccc;
 }
 
-.tile-container {
-    width: 160px;
-    height: 160px;
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    gap: 0;
-}
-
-.tile {
-    display: inline-block;
-    width: 16px; /* Adjust as needed */
-    height: 16px; /* Adjust as needed */
-    background-size: cover;
+button {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
 }
