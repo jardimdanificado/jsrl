@@ -2,7 +2,7 @@
 let session = {};
 session.tileSize = { x: 16, y: 16 };
 session.viewRange = 10;
-session.tilename = ['empty', 'wall', 'player','cempty','cwall',"closeddoor","opendoor"];
+session.tilename = ['floor_r', 'wall_r', 'creature_human','floor_c','wall_c',"door_closed","door_open"];
 session.tileset = [];
 session.creature = [];
 session.map = DungeonGenerator.generate({
@@ -130,11 +130,60 @@ session.map = matrixReplace(session.map,
 
 session.map = matrixReplace(session.map,
     [
+        [5],
+        [0],
+        [1]
+    ],
+    [
+        [5],
+        [3],
+        [4]
+    ]
+)
+
+session.map = matrixReplace(session.map,
+    [
+        [1],
+        [0],
+        [5]
+    ],
+    [
+        [4],
+        [3],
+        [5]
+    ]
+)
+
+
+session.map = matrixReplace(session.map,
+    [
         [1,0,1],
         []
     ],
     [
         [4,3,4],
+        []
+    ]
+)
+
+session.map = matrixReplace(session.map,
+    [
+        [1,0,5],
+        []
+    ],
+    [
+        [4,3,5],
+        []
+    ]
+)
+
+session.map = matrixReplace(session.map,
+    [
+        [5,0,1],
+        []
+    ],
+    [
+        [5,3,4],
         []
     ]
 )
@@ -268,7 +317,7 @@ function drawFrame() {
     }
     
     // Add the player image
-    ctx.drawImage(getTile('player'), session.viewRange * session.tileSize.x, session.viewRange * session.tileSize.y);
+    ctx.drawImage(getTile('creature_human'), session.viewRange * session.tileSize.x, session.viewRange * session.tileSize.y);
 }
 
 function initialize() 
