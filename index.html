@@ -6,39 +6,15 @@
     <link rel="stylesheet" href="styles.css">
     <script type="text/javascript" src="./src/dungeon-generator.js"></script>
     <script src="./src/util.js"></script>
+    <script src="./src/session.js"></script>
+    <script src="./src/map.js"></script>
     <title>Tile Rendering</title>
 </head>
 <body>
     <canvas id="canvas"></canvas>
-    <script src="script.js"></script>
-    <script>
-        // Add an event listener for the 'keydown' event
-        document.addEventListener('keydown', (event) => {
-            // Check the keyCode or key property to identify the pressed key
-            if (event.key === 'ArrowLeft') {
-                // Handle the left arrow key press
-                moveLeft()
-                // Add your custom logic here
-            } else if (event.key === 'ArrowRight') {
-                // Handle the right arrow key press
-                moveRight()
-                // Add your custom logic here
-            } else if (event.key === 'ArrowDown') {
-                // Handle the left arrow key press
-                moveDown()
-                // Add your custom logic here
-            } else if (event.key === 'ArrowUp') {
-                // Handle the right arrow key press
-                moveUp()
-                // Add your custom logic here
-            }
-            // Add more key checks and handling as needed
-        });
-
-    </script>
-    <button onclick="moveUp()">↑</button>
-    <button onclick="moveLeft()">←</button>
-    <button onclick="moveRight()">→</button>
-    <button onclick="moveDown()">↓</button>
+    <script src="main.js"></script>
+    <script src="./src/creature.js"></script>
+    <script src="./src/input.js"></script>
+    <script src="./src/render.js"></script>
 </body>
 </html>
