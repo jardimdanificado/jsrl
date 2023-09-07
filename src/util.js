@@ -548,3 +548,105 @@ async function abenchy(callback, args, optName = "unamed")
 		return null;
 	return (result)
 }
+
+function loadjs(scriptUrl, callback) {
+    // Create a new script element
+    const script = document.createElement('script');
+
+    // Set the 'src' attribute to the URL of the external JavaScript file
+    script.src = scriptUrl;
+
+    // Define a callback function to execute when the script has loaded
+    script.onload = function () {
+        // Call the callback function if provided
+        if (typeof callback === 'function') {
+            callback();
+        }
+    };
+
+    // Append the script element to the HTML document's <head>
+    document.head.appendChild(script);
+}
+
+function multiloadjs(scriptUrls, callback) {
+    const loadedScripts = [];
+    let scriptsToLoad = scriptUrls.length;
+
+    function scriptLoaded(scriptUrl) 
+	{
+        loadedScripts.push(scriptUrl);
+        if (loadedScripts.length === scriptsToLoad) {
+            // All scripts have loaded
+            if (typeof callback === 'function') {
+                callback();
+            }
+        }
+    }
+
+    scriptUrls.forEach((scriptUrl) => {
+        const script = document.createElement('script');
+        script.src = scriptUrl;
+        script.onload = () => scriptLoaded(scriptUrl);
+        document.head.appendChild(script);
+    });
+}
+
+function multif(func,times)
+{
+	let result = []
+	for (let index = 0; index < times; index++) 
+	{
+		result.push(func())
+	}
+	return result
+}
+
+function multifa(func,args)
+{
+	let result = []
+	for (let index = 0; index < args.length; index++) 
+	{
+		result.push(func(...args[index]))
+	}
+	return result
+}
+
+function multifat(func,arg,times)
+{
+	let result = []
+	for (let index = 0; index < times; index++) 
+	{
+		result.push(func(arg))
+	}
+	return result
+}
+
+function multic(_class,times)
+{
+	let result = []
+	for (let index = 0; index < times; index++) 
+	{
+		result.push(new _class())
+	}
+	return result
+}
+
+function multica(_class,args)
+{
+	let result = []
+	for (let index = 0; index < args.length; index++) 
+	{
+		result.push(new _class(...args[index]))
+	}
+	return result
+}
+
+function multicat(_class,arg,times)
+{
+	let result = []
+	for (let index = 0; index < times; index++) 
+	{
+		result.push(new _class(arg))
+	}
+	return result
+}

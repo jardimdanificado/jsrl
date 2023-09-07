@@ -28,15 +28,6 @@ function loadImages() {
     return Promise.all(imagePromises);
 }
 
-// Load images and then initialize and render the first frame
-loadImages()
-    .then(() => {
-        initialize(); // Initialize after all images are loaded
-        drawFrame(); // Render the first frame immediately
-    })
-    .catch((error) => {
-        console.error('Failed to load images:', error);
-    });
 
 function checkCollision(x,y) 
 {
@@ -48,6 +39,15 @@ function initialize()
     const canvas = document.getElementById('canvas');
     canvas.width = session.screen.x;
     canvas.height = session.screen.y;
-    session.creature[0] = new Creature("player")
+    session.creature[0] = creatures.human('joaozinho','515')
     spawndebugbuttons() 
 }
+
+loadImages()
+    .then(() => {
+        initialize(); // Initialize after all images are loaded
+        drawFrame(); // Render the first frame immediately
+    })
+    .catch((error) => {
+        console.error('Failed to load images:', error);
+    });
