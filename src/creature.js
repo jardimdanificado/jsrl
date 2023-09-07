@@ -37,11 +37,32 @@ function move(creature, direction) {
     drawFrame();
 }
 
-class Creature {
+class Limb 
+{
+    condition = 100
+    quality = 100
+    storage = false
+    storageType = false
+    sublimb = false
+    constructor(condition,quality,storage,sublimb)
+    {
+        
+    }
+}
+
+class Body
+{
+    
+}
+
+class Creature 
+{
     name = 'player'
-    hp = 100
-    mp = 0
-    hunger = 0
+    body = {
+        food:100,
+        water:100,
+
+    }
     position = { x: 15, y: 15 }
     constructor(name, hp, mp, hunger, position) {
         this.name = name || 'player'
