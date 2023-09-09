@@ -31,7 +31,12 @@ function loadImages() {
 
 function checkCollision(x,y) 
 {
-    return(!(session.tilename[session.map[x][y]].includes("floor_") || session.tilename[session.map[x][y]].includes("door_open"))) 
+    if (session.doormap[x][y] === false) 
+    {
+        return(!(session.tilename[session.map[x][y]].includes("floor_"))) 
+    }
+    else
+        return !(session.doormap[x][y].open)
 }
 
 function initialize() 

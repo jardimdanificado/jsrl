@@ -650,3 +650,23 @@ function multicat(_class,arg,times)
 	}
 	return result
 }
+
+function newArray(size,value = 0)
+{
+	let arr = []
+	for (let i = 0; i < size; i++) 
+	{
+		arr.push(value)
+	}
+	return arr
+}
+
+function newMatrix(x,y,value = 0) 
+{
+	let matrix = []
+	for (let xx = 0; xx < x; xx++) 
+	{
+		matrix.push(newArray(y,value))
+	}
+	return matrix	
+}

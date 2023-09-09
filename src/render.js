@@ -17,7 +17,13 @@ function drawFrame()
             {
                 const tileX = (x - startX) * session.tileSize.x;
                 const tileY = (y - startY) * session.tileSize.y;
-                ctx.drawImage(session.tileset[session.map[x][y]], tileX, tileY);
+                if (session.map[x][y] == 5) 
+                {
+                    let sprite = session.doormap[x][y].open ? 6 : 5;
+                    ctx.drawImage(session.tileset[sprite], tileX, tileY);
+                }
+                else
+                    ctx.drawImage(session.tileset[session.map[x][y]], tileX, tileY);
             }
         }
     }

@@ -6,93 +6,47 @@ function move(creature, x, y)
     {
         creature.position.x = tx;
         creature.position.y = ty;
-        creature.direction.x = tx
-        creature.direction.y = ty
     } 
-    else if (session.map[tx][ty] == 5 && roleta(2, 1) == 1) 
+    else if (session.map[tx][ty] == 5 && session.doormap[tx][ty].open ==  false) 
     {
-        session.map[tx][ty] = roleta(0, 0, 0, 0, 0, 2, 1);
+        console.log('ddddddddddddddd')
+        session.doormap[tx][ty].open = roleta(session.doormap[tx][ty].difficulty,1);
     }
     drawFrame();
 }
 
-class Mod
+class Buff
 {
-    constructor(type,description,skill,buff)
+    constructor(type,description,group,value)
     {
         this.type = type
-        this.skill = skill
-        this.buff = buff
+        this.group = group
+        this.value = value
         this.description = description
+    }
+}
+
+class Skill
+{
+    constructor(name,xp,active=true)
+    {
+        this.name = name
+        this.active = active
+        this.xp = xp
     }
 }
 
 class Memory
 {
-    constructor(what,when,where,who = 'nobody', mood = 0, mods)
+    constructor(actor, victim, action, what, when, where, buff)
     {
-        this.who = who
-        this.what = what
-        this.when = when
-        this.where = where
-        this.mood = mood
-        this.mods = mods || {}
-    }
-}
-
-class Knowledge
-{
-    constructor(name = 'noname',action, what, when = -1 ,where = 'nowhere',teacher = 'self', mods, memory)
-    {
-        this.name = name
-        this.teacher = teacher
+        this.actor = actor
+        this.victim = victim
         this.action = action
         this.what = what
         this.when = when
         this.where = where
-        this.mods = mods || {}
-        this.memory = memory || undefined
-    }
-}
-
-class Limb 
-{
-    name = "unamed"
-    condition = 100
-    quality = 100
-    storage = false
-    parent = false
-    relatives = []
-    mods = []
-    constructor(name,storage,parent)
-    {
-        this.name = name || this.name;
-        this.storage = storage || this.storage;
-        if (parent) 
-        {
-            this.parent = this.parent;
-            parent.relatives.push(this)
-        }
-    }
-}
-
-class Body
-{
-    limb = []
-    newLimb = (name,storage,parent,mods) => 
-    {
-        let result = new Limb(name,storage,parent,mods)
-        this.limb.push(result)
-        this.limb[name] = result
-        return result
-    }
-    constructor(specime,...limbs)
-    {
-        this.specime = specime
-        for (let index = 0; index < limbs.length; index++) 
-        {
-            this.limb.push(limbs[index])
-        }
+        this.buff = buff || {}
     }
 }
 
@@ -100,105 +54,63 @@ class Creature
 {
     specime = 'human'
     position = { x: 15, y: 15 }
-    direction = {x:0,y:1}
-    mods = []
-    skill = 
+    body = 
     {
-        strength:0,
-        jump:0,
-        walk:0,
-        swim:0,
-        memorize:0,
-        think:0,
-        speech:0,
-        carisma:0,
-        appearence:0,
-        vision: 0,
-        smell: 0,
-        see: 0,
-        eat: 0,
-        drink: 0,
-        speak: 0,
-        pickup: 0,
-        spit: 0,
-        pee: 0,
-        poop: 0,
-        reproduce:0
+        hp:100,
+        mp:0,
+        waker:100,
+        drink:100,
+        sleep:100
     }
-    body;
-    newMemory = (actor, victim, what, when, where, mods) =>
+    memory = []
+    knowledge = {}
+    skill = {}
+    _skill_buffs = {}
+    buff = []
+    new = 
     {
-        let obj = {}
-        obj.actor = actor
-        obj.victim = victim
-        obj.what = what
-        obj.when = when
-        obj.where = where
-        obj.mods = mods
-        this.body.limb.brain.storage.knowledge.push(obj)
-    }
-    newKnowledge = (name = 'noname',what,when = -1 ,where = 'nowhere',teacher = 'self', mods, memory) =>
-    {
-        let obj = {}
-        obj.name = name
-        obj.teacher = teacher
-        obj.what = what
-        obj.when = when
-        obj.where = where
-        obj.mods = mods
-        obj.memory = memory || undefined
+        skill:(name,xp,active=false)=>
+        {
+            this.skill[name] = new Skill(name,xp,active) 
+        },
+        memory:(actor, victim, action, what, when, where, buffs) =>
+        {
+            let obj = new Memory(actor,victim,action,what,when,where,buffs)
+            if (buffs) 
+            {
+                obj.buffs = buffs
+            }
+            this.memory.push(obj)
+        },
+        knowledge:(name,content) =>
+        {
+            this.knowledge[name] = content
+            return this.knowledge[name]
+        },
+        buff:(type,description,group,value)=>
+        {
+            this.buff.push(new Buff(type,description,group,value))
+            return this.buff[this.buff.length]
+        }
     }
     update = ()=>
     {
-
-    }
-    mod = (mod)=>
-    {
-        if (mod.name) 
+        this._skill_buffs = {}
+        for (const iterator of this.skill) 
         {
-            let m = this.mods.push(mod)
-            this.skill[mod.skill] += mod.buff
-            return m
+            this._skill_buffs[this.skill[i]] = 0
         }
-        else
+        for (const iterator of buff) 
         {
-            let result = []
-            for (let index = 0; index < mod.length; index++) 
+            if (buff.type == 'skill') 
             {
-                let m = this.mods.push(mod)
-                this.skill[mod.skill] += mod.buff
-                result.push(m)
-            }
-            return result
-        }
-    }
-    unmod = (mod)=>
-    {
-        if (typeof(mod) == 'string') 
-        {
-            for (let index = 0; index < this.mods; index++) 
-            {
-                if (this.mods[index].name == mod) 
-                {
-                    this.mods.splice(index,1)
-                    break
-                }
+                this._skill_buffs += this.buff[this.buff.type].value
             }
         }
-        else
-            for (let index = 0; index < this.mods; index++) 
-            {
-                if (this.mods[index].name == mod.name) 
-                {
-                    this.mods.splice(index,1)
-                    break
-                }
-            }
     }
-    constructor(specime = 'human', position, body = new Body()) 
+    constructor(specime = 'human', position) 
     {
         this.specime = specime
-        this.body = body
         if (!position) 
         {
             while (!session.tilename[session.map[this.position.x][this.position.y]].includes("floor_")) 
@@ -225,55 +137,21 @@ var creatures =
     human:function(name='noname',age='23') 
     {
         let creature = new Creature('human')
-        let body = creature.body
-        
-        let head = body.newLimb('head')
-        body.newLimb('brain',{knowledge:[],memory:[]},head)
-        body.newLimb('nose',false,head)
-        body.newLimb('eye',false,head)
-        body.newLimb('eye',false,head)
-        body.newLimb('ear',false,head)
-        body.newLimb('ear',false,head)
-
-        let mouth = body.newLimb('mouth',false,head)
-        body.newLimb('tongue',false,mouth)
-        for(let i = 0; i < 32; i++)
-            body.newLimb('teeth',false,mouth)
-
-        let neck = body.newLimb('neck',false,head)
-
-        let torso = body.newLimb('torso',false,neck)
-
-        body.newLimb('penis',false,torso)
-
-        body.newLimb('anus',false,torso)
-
-        for (let index = 0; index < 2; index++) {
-            let arm = body.newLimb('arm',false,torso)
-            let hand = body.newLimb('hand',false,arm)
-            let finger
-            for (let index = 0; index < 5; index++) 
-            {
-                finger = body.newLimb('finger',false,hand)
-                body.newLimb('nail')    
-            }
-        }
-
-        for (let index = 0; index < 2; index++) {
-            let leg = body.newLimb('leg',false,torso)
-            let feet = body.newLimb('feet',false,leg)
-            let finger
-            for (let index = 0; index < 5; index++) 
-            {
-                finger = body.newLimb('finger',false,feet)
-                body.newLimb('nail')    
-            }
-        }
-
-        creature.newMemory('unknown','self','birth',0,{x:0,y:0})
-        let m = creature.newMemory('unknown','self','named',0,{x:0,y:0})
-        let mbuff = creature.mod([new Mod('buff','i know my name','speech',1)])
-        creature.newKnowledge('my name','name',0,{x:0,y:0},'unknown',mbuff,m)
+        creature.new.memory('self_mom','self','gave_birth','human',0,{x:0,y:0})
+        creature.new.skill('walk',1)
+        creature.new.skill('speech',1)
+        creature.new.skill('see',1)
+        creature.new.skill('eat',1)
+        creature.new.skill('drink',1)
+        creature.new.skill('pee',1)
+        creature.new.skill('poop',1)
+        creature.new.skill('think',1)
+        creature.new.skill('memorize',1)
+        creature.new.skill('remember',1)
+        creature.new.skill('learn',1)
+        let mbuff = creature.new.buff('skill','i know my name','speech',1)
+        creature.new.memory('self_mom','self','named',0,{x:0,y:0},0,[mbuff])
+        creature.new.knowledge("self_name",name)
         return creature
     }
 }
