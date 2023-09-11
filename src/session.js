@@ -20,7 +20,7 @@ export function checkCollision(x,y)
 {
     if (map.door[x][y] === false) 
     {
-        return(!(tilename[map.world[x][y]].includes("floor_"))) 
+        return(!(tilename[map.tile[x][y]].includes("floor_"))) 
     }
     else
         return !(map.door[x][y].open)

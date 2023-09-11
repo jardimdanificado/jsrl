@@ -2,7 +2,8 @@ let util = await import("./util.js")
 let DungeonGenerator = await import("./dungeon-generator.js")
 
 export var _map = {}
-_map.world = DungeonGenerator.generate({
+
+_map.tile = DungeonGenerator.generate({
     maxRoomSize: 15,
     minRoomSize: 3,
     padding: 0,
@@ -13,7 +14,7 @@ _map.world = DungeonGenerator.generate({
 
 _map.door = util.newMatrix(41,61,false)
 
-_map.world = util.matrixReplace(_map.world,
+_map.tile = util.matrixReplace(_map.tile,
     [
         [1,0,1],
         [undefined,0,0],
@@ -24,7 +25,7 @@ _map.world = util.matrixReplace(_map.world,
     ]
 )
 
-_map.world = util.matrixReplace(_map.world,
+_map.tile = util.matrixReplace(_map.tile,
     [
         [1,0,1],
         [0,0,undefined],
@@ -35,7 +36,7 @@ _map.world = util.matrixReplace(_map.world,
     ]
 )
 
-_map.world = util.matrixReplace(_map.world,
+_map.tile = util.matrixReplace(_map.tile,
     [
         [0,0,undefined],
         [1,0,1],
@@ -46,7 +47,7 @@ _map.world = util.matrixReplace(_map.world,
     ]
 )
 
-_map.world = util.matrixReplace(_map.world,
+_map.tile = util.matrixReplace(_map.tile,
     [
         [undefined,0,0],
         [1,0,1],
@@ -57,7 +58,7 @@ _map.world = util.matrixReplace(_map.world,
     ]
 )
 
-_map.world = util.matrixReplace(_map.world,
+_map.tile = util.matrixReplace(_map.tile,
     [
         [1,undefined],
         [0,0],
@@ -70,7 +71,7 @@ _map.world = util.matrixReplace(_map.world,
     ]
 )
 
-_map.world = util.matrixReplace(_map.world,
+_map.tile = util.matrixReplace(_map.tile,
     [
         [1,0],
         [0,0],
@@ -83,7 +84,7 @@ _map.world = util.matrixReplace(_map.world,
     ]
 )
 
-_map.world = util.matrixReplace(_map.world,
+_map.tile = util.matrixReplace(_map.tile,
     [
         [0,1],
         [0,0],
@@ -96,7 +97,7 @@ _map.world = util.matrixReplace(_map.world,
     ]
 )
 
-_map.world = util.matrixReplace(_map.world,
+_map.tile = util.matrixReplace(_map.tile,
     [
         [undefined,1],
         [0,0],
@@ -109,7 +110,7 @@ _map.world = util.matrixReplace(_map.world,
     ]
 )
 
-_map.world = util.matrixReplace(_map.world,
+_map.tile = util.matrixReplace(_map.tile,
     [
         [1],
         [0],
@@ -122,7 +123,7 @@ _map.world = util.matrixReplace(_map.world,
     ]
 )
 
-_map.world = util.matrixReplace(_map.world,
+_map.tile = util.matrixReplace(_map.tile,
     [
         [5],
         [0],
@@ -135,7 +136,7 @@ _map.world = util.matrixReplace(_map.world,
     ]
 )
 
-_map.world = util.matrixReplace(_map.world,
+_map.tile = util.matrixReplace(_map.tile,
     [
         [1],
         [0],
@@ -149,7 +150,7 @@ _map.world = util.matrixReplace(_map.world,
 )
 
 
-_map.world = util.matrixReplace(_map.world,
+_map.tile = util.matrixReplace(_map.tile,
     [
         [1,0,1],
         []
@@ -160,7 +161,7 @@ _map.world = util.matrixReplace(_map.world,
     ]
 )
 
-_map.world = util.matrixReplace(_map.world,
+_map.tile = util.matrixReplace(_map.tile,
     [
         [1,0,5],
         []
@@ -171,7 +172,7 @@ _map.world = util.matrixReplace(_map.world,
     ]
 )
 
-_map.world = util.matrixReplace(_map.world,
+_map.tile = util.matrixReplace(_map.tile,
     [
         [5,0,1],
         []
@@ -182,7 +183,7 @@ _map.world = util.matrixReplace(_map.world,
     ]
 )
 
-_map.world = util.matrixReplace(_map.world,
+_map.tile = util.matrixReplace(_map.tile,
     [
         [4],
         [0]
@@ -193,7 +194,7 @@ _map.world = util.matrixReplace(_map.world,
     ]
 )
 
-_map.world = util.matrixReplace(_map.world,
+_map.tile = util.matrixReplace(_map.tile,
     [
         [0],
         [4]
@@ -204,7 +205,7 @@ _map.world = util.matrixReplace(_map.world,
     ]
 )
 
-_map.world = util.matrixReplace(_map.world,
+_map.tile = util.matrixReplace(_map.tile,
     [
         [0,4],
         []
@@ -215,7 +216,7 @@ _map.world = util.matrixReplace(_map.world,
     ]
 )
 
-_map.world = util.matrixReplace(_map.world,
+_map.tile = util.matrixReplace(_map.tile,
     [
         [4,0],
         []
@@ -226,7 +227,7 @@ _map.world = util.matrixReplace(_map.world,
     ]
 )
 
-_map.world = util.matrixReplace(_map.world,
+_map.tile = util.matrixReplace(_map.tile,
     [
         [5,1,5],
         []
@@ -237,7 +238,7 @@ _map.world = util.matrixReplace(_map.world,
     ]
 )
 
-_map.world = util.matrixReplace(_map.world,
+_map.tile = util.matrixReplace(_map.tile,
     [
         [5],
         [1],
@@ -261,7 +262,7 @@ export class Door
     }
 }
 
-_map.world.forEach((element,x) => 
+_map.tile.forEach((element,x) => 
     {
         element.forEach((element,y) => 
             {

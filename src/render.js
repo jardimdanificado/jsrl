@@ -13,17 +13,17 @@ export function drawFrame(session)
     {
         for (let y = startY; y <= session.creature[0].position.y + session.viewRange; y++) 
         {
-            if (x >= 0 && y >= 0 && x < session.map.world.length && y < session.map.world[x].length) 
+            if (x >= 0 && y >= 0 && x < session.map.tile.length && y < session.map.tile[x].length) 
             {
                 const tileX = (x - startX) * session.tileSize.x;
                 const tileY = (y - startY) * session.tileSize.y;
-                if (session.map.world[x][y] == 5) 
+                if (session.map.tile[x][y] == 5) 
                 {
                     let sprite = session.map.door[x][y].open ? 6 : 5;
                     ctx.drawImage(session.tileset[sprite], tileX, tileY);
                 }
                 else
-                    ctx.drawImage(session.tileset[session.map.world[x][y]], tileX, tileY);
+                    ctx.drawImage(session.tileset[session.map.tile[x][y]], tileX, tileY);
             }
         }
     }
