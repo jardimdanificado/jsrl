@@ -1,7 +1,12 @@
-function getTile(tilename) 
-{
-    return session.tileset[session.tilename[tilename]]
-}
+import * as util from "./src/util.js"
+import * as session from "./src/session.js"
+import * as creature from "./src/creature.js"
+import { set_keydown,spawndebugbuttons } from "./src/input.js"
+import { drawFrame } from "./src/render.js"
+
+set_keydown(session)
+var creatures = creature.creatures
+
 
 // Function to load an image as a Promise
 function loadImage(src) 
@@ -29,29 +34,20 @@ function loadImages() {
 }
 
 
-function checkCollision(x,y) 
-{
-    if (session.doormap[x][y] === false) 
-    {
-        return(!(session.tilename[session.map[x][y]].includes("floor_"))) 
-    }
-    else
-        return !(session.doormap[x][y].open)
-}
 
 function initialize() 
 {
     const canvas = document.getElementById('canvas');
     canvas.width = session.screen.x;
     canvas.height = session.screen.y;
-    session.creature[0] = creatures.human('joaozinho','515')
-    spawndebugbuttons() 
+    session.creature[0] = creatures.human(session,'joaozinho',51)
+    spawndebugbuttons(session) 
 }
 
 loadImages()
     .then(() => {
         initialize(); // Initialize after all images are loaded
-        drawFrame(); // Render the first frame immediately
+        drawFrame(session); // Render the first frame immediately
     })
     .catch((error) => {
         console.error('Failed to load images:', error);

@@ -1,4 +1,8 @@
-session.map = DungeonGenerator.generate({
+let util = await import("./util.js")
+let DungeonGenerator = await import("./dungeon-generator.js")
+
+export var _map = {}
+_map.world = DungeonGenerator.generate({
     maxRoomSize: 15,
     minRoomSize: 3,
     padding: 0,
@@ -7,9 +11,9 @@ session.map = DungeonGenerator.generate({
     cols: 61,
 });
 
-session.doormap = newMatrix(41,61,false)
+_map.door = util.newMatrix(41,61,false)
 
-session.map = matrixReplace(session.map,
+_map.world = util.matrixReplace(_map.world,
     [
         [1,0,1],
         [undefined,0,0],
@@ -20,7 +24,7 @@ session.map = matrixReplace(session.map,
     ]
 )
 
-session.map = matrixReplace(session.map,
+_map.world = util.matrixReplace(_map.world,
     [
         [1,0,1],
         [0,0,undefined],
@@ -31,7 +35,7 @@ session.map = matrixReplace(session.map,
     ]
 )
 
-session.map = matrixReplace(session.map,
+_map.world = util.matrixReplace(_map.world,
     [
         [0,0,undefined],
         [1,0,1],
@@ -42,7 +46,7 @@ session.map = matrixReplace(session.map,
     ]
 )
 
-session.map = matrixReplace(session.map,
+_map.world = util.matrixReplace(_map.world,
     [
         [undefined,0,0],
         [1,0,1],
@@ -53,7 +57,7 @@ session.map = matrixReplace(session.map,
     ]
 )
 
-session.map = matrixReplace(session.map,
+_map.world = util.matrixReplace(_map.world,
     [
         [1,undefined],
         [0,0],
@@ -66,7 +70,7 @@ session.map = matrixReplace(session.map,
     ]
 )
 
-session.map = matrixReplace(session.map,
+_map.world = util.matrixReplace(_map.world,
     [
         [1,0],
         [0,0],
@@ -79,7 +83,7 @@ session.map = matrixReplace(session.map,
     ]
 )
 
-session.map = matrixReplace(session.map,
+_map.world = util.matrixReplace(_map.world,
     [
         [0,1],
         [0,0],
@@ -92,7 +96,7 @@ session.map = matrixReplace(session.map,
     ]
 )
 
-session.map = matrixReplace(session.map,
+_map.world = util.matrixReplace(_map.world,
     [
         [undefined,1],
         [0,0],
@@ -105,7 +109,7 @@ session.map = matrixReplace(session.map,
     ]
 )
 
-session.map = matrixReplace(session.map,
+_map.world = util.matrixReplace(_map.world,
     [
         [1],
         [0],
@@ -118,7 +122,7 @@ session.map = matrixReplace(session.map,
     ]
 )
 
-session.map = matrixReplace(session.map,
+_map.world = util.matrixReplace(_map.world,
     [
         [5],
         [0],
@@ -131,7 +135,7 @@ session.map = matrixReplace(session.map,
     ]
 )
 
-session.map = matrixReplace(session.map,
+_map.world = util.matrixReplace(_map.world,
     [
         [1],
         [0],
@@ -145,7 +149,7 @@ session.map = matrixReplace(session.map,
 )
 
 
-session.map = matrixReplace(session.map,
+_map.world = util.matrixReplace(_map.world,
     [
         [1,0,1],
         []
@@ -156,7 +160,7 @@ session.map = matrixReplace(session.map,
     ]
 )
 
-session.map = matrixReplace(session.map,
+_map.world = util.matrixReplace(_map.world,
     [
         [1,0,5],
         []
@@ -167,7 +171,7 @@ session.map = matrixReplace(session.map,
     ]
 )
 
-session.map = matrixReplace(session.map,
+_map.world = util.matrixReplace(_map.world,
     [
         [5,0,1],
         []
@@ -178,7 +182,7 @@ session.map = matrixReplace(session.map,
     ]
 )
 
-session.map = matrixReplace(session.map,
+_map.world = util.matrixReplace(_map.world,
     [
         [4],
         [0]
@@ -189,7 +193,7 @@ session.map = matrixReplace(session.map,
     ]
 )
 
-session.map = matrixReplace(session.map,
+_map.world = util.matrixReplace(_map.world,
     [
         [0],
         [4]
@@ -200,7 +204,7 @@ session.map = matrixReplace(session.map,
     ]
 )
 
-session.map = matrixReplace(session.map,
+_map.world = util.matrixReplace(_map.world,
     [
         [0,4],
         []
@@ -211,7 +215,7 @@ session.map = matrixReplace(session.map,
     ]
 )
 
-session.map = matrixReplace(session.map,
+_map.world = util.matrixReplace(_map.world,
     [
         [4,0],
         []
@@ -222,7 +226,7 @@ session.map = matrixReplace(session.map,
     ]
 )
 
-session.map = matrixReplace(session.map,
+_map.world = util.matrixReplace(_map.world,
     [
         [5,1,5],
         []
@@ -233,7 +237,7 @@ session.map = matrixReplace(session.map,
     ]
 )
 
-session.map = matrixReplace(session.map,
+_map.world = util.matrixReplace(_map.world,
     [
         [5],
         [1],
@@ -246,7 +250,7 @@ session.map = matrixReplace(session.map,
     ]
 )
 
-class Door
+export class Door
 {
     constructor(position,open = false,difficulty = 1, key = false)
     {
@@ -257,13 +261,13 @@ class Door
     }
 }
 
-session.map.forEach((element,x) => 
+_map.world.forEach((element,x) => 
     {
         element.forEach((element,y) => 
             {
                 if (element == 5) 
                 {
-                    session.doormap[x][y] = new Door({x:x,y:y},false)
+                    _map.door[x][y] = new Door({x:x,y:y},false)
                 }
             }
         );

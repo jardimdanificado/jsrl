@@ -1,4 +1,4 @@
-function drawFrame() 
+export function drawFrame(session) 
 {
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
@@ -13,21 +13,21 @@ function drawFrame()
     {
         for (let y = startY; y <= session.creature[0].position.y + session.viewRange; y++) 
         {
-            if (x >= 0 && y >= 0 && x < session.map.length && y < session.map[x].length) 
+            if (x >= 0 && y >= 0 && x < session.map.world.length && y < session.map.world[x].length) 
             {
                 const tileX = (x - startX) * session.tileSize.x;
                 const tileY = (y - startY) * session.tileSize.y;
-                if (session.map[x][y] == 5) 
+                if (session.map.world[x][y] == 5) 
                 {
-                    let sprite = session.doormap[x][y].open ? 6 : 5;
+                    let sprite = session.map.door[x][y].open ? 6 : 5;
                     ctx.drawImage(session.tileset[sprite], tileX, tileY);
                 }
                 else
-                    ctx.drawImage(session.tileset[session.map[x][y]], tileX, tileY);
+                    ctx.drawImage(session.tileset[session.map.world[x][y]], tileX, tileY);
             }
         }
     }
     
     // Add the player image
-    ctx.drawImage(getTile('creature_human'), session.viewRange * session.tileSize.x, (session.viewRange) * session.tileSize.y);
+    ctx.drawImage(session.getTile('creature_human'), session.viewRange * session.tileSize.x, (session.viewRange) * session.tileSize.y);
 }

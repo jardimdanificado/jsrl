@@ -35,15 +35,15 @@
 * }
 */
 
-var DungeonGenerator = (function(){
+let DungeonGenerator = (function(){
 
-  var MAXSIZE, MINSIZE, ROWS, COLS, BORDER,
+  let MAXSIZE, MINSIZE, ROWS, COLS, BORDER,
       ATTEMPTS, WALL='W', EMPTY='E', ROOMS;
 
   function isNotOverlapping(floorMap, room) {
-    var status = true;
-    for (var i = room.row - 1; i < room.row + room.h + 1  ; i++ ) {
-      for (var j = room.col-1; j < room.col + room.w +1; j++) {
+    let status = true;
+    for (let i = room.row - 1; i < room.row + room.h + 1  ; i++ ) {
+      for (let j = room.col-1; j < room.col + room.w +1; j++) {
         if (floorMap[i][j] !== WALL) {
             status = false;
             break;
@@ -54,49 +54,49 @@ var DungeonGenerator = (function(){
   }
 
   function linkStraightH(floorMap, r1, r2){
-    var inc = r1.col < r2.col ? 1 : -1;
-    for (var i = r1.col; i !== r2.col; i+=inc) {
+    let inc = r1.col < r2.col ? 1 : -1;
+    for (let i = r1.col; i !== r2.col; i+=inc) {
       floorMap[r1.row][i] = EMPTY;
     }
   };
 
   function linkStraightV(floorMap, r1, r2){
-    var inc = r1.row < r2.row ? 1 : -1;
-    for (var i = r1.row; i !== r2.row; i+=inc) {
+    let inc = r1.row < r2.row ? 1 : -1;
+    for (let i = r1.row; i !== r2.row; i+=inc) {
       floorMap[i][r1.col] = EMPTY;
     }
   };
 
   function link2Steps(floorMap, r1, r2) {
-    var flipCoin = Math.floor(Math.random()*2);
+    let flipCoin = Math.floor(Math.random()*2);
     // TOP LEFT
     if(r1.row > r2.row && r1.col > r2.col) {
       if (flipCoin) {
         // Vertical then horizontal hallway
-        for (var i = r1.row-1; i >= r2.row + r2.h-1; i--)
+        for (let i = r1.row-1; i >= r2.row + r2.h-1; i--)
           floorMap[i][r1.col] = EMPTY;
-        for (var i = r1.col-1;  i >= r2.col + r2.w; i--)
+        for (let i = r1.col-1;  i >= r2.col + r2.w; i--)
           floorMap[r2.row+r2.h-1][i] = EMPTY;
       } else {
         // H First
-        for (var i = r1.col-1; i >= r2.col + r2.w-1; i--)
+        for (let i = r1.col-1; i >= r2.col + r2.w-1; i--)
           floorMap[r1.row][i] = EMPTY;
-        for (var i = r1.row-1;  i >= r2.row + r2.h; i--)
+        for (let i = r1.row-1;  i >= r2.row + r2.h; i--)
           floorMap[i][r2.col+r2.w-1] = EMPTY;
       }
     // TOP RIGHT
     } else if(r1.row > r2.row && r1.col < r2.col) {
       if (flipCoin) {
         // V First
-        for (var i = r1.row-1; i >= r2.row + r2.h-1; i--)
+        for (let i = r1.row-1; i >= r2.row + r2.h-1; i--)
           floorMap[i][r1.col+r1.w-1] = EMPTY;
-        for (var i = r1.col + r1.w;  i < r2.col; i++)
+        for (let i = r1.col + r1.w;  i < r2.col; i++)
           floorMap[r2.row+r2.h-1][i] = EMPTY;
       } else {
         // H First
-        for (var i = r1.col + r1.w; i <= r2.col; i++)
+        for (let i = r1.col + r1.w; i <= r2.col; i++)
           floorMap[r1.row][i] = EMPTY;
-        for (var i = r1.row-1;  i >= r2.row + r2.h; i--)
+        for (let i = r1.row-1;  i >= r2.row + r2.h; i--)
           floorMap[i][r2.col] = EMPTY;
 
       }
@@ -128,10 +128,10 @@ var DungeonGenerator = (function(){
   };
 
   function addRoom(floorMap) {
-    var out = undefined;
-    var h = randomEvenOdd(MINSIZE, MAXSIZE);
-    var w = randomEvenOdd(MINSIZE, MAXSIZE);
-    var room = {
+    let out = undefined;
+    let h = randomEvenOdd(MINSIZE, MAXSIZE);
+    let w = randomEvenOdd(MINSIZE, MAXSIZE);
+    let room = {
       h: h,
       w: w,
       row: randomEvenOdd(0, ROWS-h-2*BORDER) + BORDER,
@@ -139,8 +139,8 @@ var DungeonGenerator = (function(){
     };
 
     if (isNotOverlapping(floorMap, room)){
-      for (var i = room.row; i < room.row + room.h; i++) {
-        for (var j = room.col; j < room.col + room.w; j++) {
+      for (let i = room.row; i < room.row + room.h; i++) {
+        for (let j = room.col; j < room.col + room.w; j++) {
           floorMap[i][j] = EMPTY;
         }
       }
@@ -149,10 +149,10 @@ var DungeonGenerator = (function(){
     return out;
   };
 
-  var DungeonGenerator = {
+  let DungeonGenerator = {
     generate: function(config) {
 
-      var cfg = config ? config : {};
+      let cfg = config ? config : {};
 
       ROWS = cfg.rows || 31;
       COLS = cfg.cols || 51;
@@ -162,21 +162,21 @@ var DungeonGenerator = (function(){
       ATTEMPTS = cfg.maxAttempts || 500;
       ROOMS = cfg.rooms || 15;
 
-      var floorMap = [];
-      for (var i = 0; i < ROWS; i++) {
-        var r = [];
-        for (j = 0; j < COLS; j++) {
+      let floorMap = [];
+      for (let i = 0; i < ROWS; i++) {
+        let r = [];
+        for (let j = 0; j < COLS; j++) {
           r.push(WALL);
         }
         floorMap.push(r);
       }
 
-      var roomsToLink = [];
-      var roomsLinked = [];
-      var i = 0;
-      var r = 0;
+      let roomsToLink = [];
+      let roomsLinked = [];
+      let i = 0;
+      let r = 0;
       while (i < ATTEMPTS && r < ROOMS){
-        var newRooom = addRoom(floorMap);
+        let newRooom = addRoom(floorMap);
         if(newRooom) {
           roomsToLink.push(newRooom);
           r++;
@@ -185,14 +185,14 @@ var DungeonGenerator = (function(){
       }
 
       function distance(a, b) {
-        var d2 = (b.row-a.row)^2 + (b.col-a.col)^2;
+        let d2 = (b.row-a.row)^2 + (b.col-a.col)^2;
         return Math.sqrt(d2);
       };
 
       roomsLinked.push(roomsToLink.pop());
       while(roomsToLink.length) {
-        var r1 = roomsLinked[roomsLinked.length - 1];
-        var r2 = roomsToLink.sort(function (a,b){
+        let r1 = roomsLinked[roomsLinked.length - 1];
+        let r2 = roomsToLink.sort(function (a,b){
           if (distance(r1,a) < distance(r1,b)) return 1;
           if (distance(r1,a) > distance(r1,b)) return -1;
           return 0;
@@ -210,3 +210,5 @@ var DungeonGenerator = (function(){
   };
   return DungeonGenerator;
 })();
+
+export let generate = DungeonGenerator.generate

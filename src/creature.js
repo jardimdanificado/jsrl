@@ -1,21 +1,23 @@
-function move(creature, x, y) 
+import * as util from "./util.js"
+import {drawFrame} from "./render.js"
+
+export function move(session,creature, x, y) 
 {
     const tx = (x && x!=0) ? creature.position.x + x : creature.position.x;
     const ty = (y && y!=0) ? creature.position.y + y : creature.position.y;
-    if (!checkCollision(tx, ty)) 
+    if (!session.checkCollision(tx, ty)) 
     {
         creature.position.x = tx;
         creature.position.y = ty;
     } 
-    else if (session.map[tx][ty] == 5 && session.doormap[tx][ty].open ==  false) 
+    else if (session.map.world[tx][ty] == 5 && session.map.door[tx][ty].open ==  false) 
     {
-        console.log('ddddddddddddddd')
-        session.doormap[tx][ty].open = roleta(session.doormap[tx][ty].difficulty,1);
+        session.map.door[tx][ty].open = util.roleta(session.map.door[tx][ty].difficulty,1);
     }
-    drawFrame();
+    drawFrame(session);
 }
 
-class Buff
+export class Buff 
 {
     constructor(type,description,group,value)
     {
@@ -26,7 +28,7 @@ class Buff
     }
 }
 
-class Skill
+export class Skill
 {
     constructor(name,xp,active=true)
     {
@@ -36,7 +38,7 @@ class Skill
     }
 }
 
-class Memory
+export class Memory
 {
     constructor(actor, victim, action, what, when, where, buff)
     {
@@ -50,7 +52,7 @@ class Memory
     }
 }
 
-class Creature 
+export class Creature 
 {
     specime = 'human'
     position = { x: 15, y: 15 }
@@ -108,15 +110,15 @@ class Creature
             }
         }
     }
-    constructor(specime = 'human', position) 
+    constructor(session,specime = 'human', position) 
     {
         this.specime = specime
         if (!position) 
         {
-            while (!session.tilename[session.map[this.position.x][this.position.y]].includes("floor_")) 
+            while (!session.tilename[session.map.world[this.position.x][this.position.y]].includes("floor_")) 
             {
-                this.position.x = randi(0, session.map.length - 1)
-                this.position.y = randi(0, session.map[0].length - 1)
+                this.position.x = util.randi(0, session.map.world.length - 1)
+                this.position.y = util.randi(0, session.map.world[0].length - 1)
             };
         }
         else
@@ -124,19 +126,19 @@ class Creature
         let creature = this
         this.move =
         {
-            up: function () { move(creature, 0, -1) },
-            down: function () { move(creature, 0, 1) },
-            left: function () { move(creature, -1, 0) },
-            right: function () { move(creature, 1, 0) },
+            up: function () {session, move(session,creature, 0, -1) },
+            down: function () {session, move(session,creature, 0, 1) },
+            left: function () {session, move(session,creature, -1, 0) },
+            right: function () {session, move(session,creature, 1, 0) },
         }
     }
 }
 
-var creatures = 
+export var creatures = 
 {
-    human:function(name='noname',age='23') 
+    human:function(session, name='noname',age='23') 
     {
-        let creature = new Creature('human')
+        let creature = new Creature(session,'human')
         creature.new.memory('self_mom','self','gave_birth','human',0,{x:0,y:0})
         creature.new.skill('walk',1)
         creature.new.skill('speech',1)

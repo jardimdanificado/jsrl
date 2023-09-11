@@ -1,5 +1,5 @@
 
-function cloneMatrix(matrix) {
+export function cloneMatrix(matrix) {
     // Check if the input is a valid matrix (2D array)
     if (!Array.isArray(matrix) || matrix.length === 0 || !Array.isArray(matrix[0])) {
         throw new Error('Invalid matrix input');
@@ -26,7 +26,7 @@ function cloneMatrix(matrix) {
 }
 
 
-function matrixReplace(matrix, oldPattern, newPattern) {
+export function matrixReplace(matrix, oldPattern, newPattern) {
     const numRows = matrix.length;
     if (numRows === 0) return matrix; // Empty matrix, nothing to replace
 
@@ -72,27 +72,27 @@ function matrixReplace(matrix, oldPattern, newPattern) {
     return clonedMatrix;
 }
 
-function Vector3Subtract(vec0,vec1)
+export function Vector3Subtract(vec0,vec1)
 {
 	return {x:vec0.x - vec1.x,y:vec0.y - vec1.y,z:vec0.z - vec1.z};
 }
 
-function Vector3Add(vec0,vec1)
+export function Vector3Add(vec0,vec1)
 {
 	return {x:vec0.x + vec1.x,y:vec0.y + vec1.y,z:vec0.z + vec1.z};
 }
 
-function Vector2Subtract(vec0,vec1)
+export function Vector2Subtract(vec0,vec1)
 {
 	return {x:vec0.x - vec1.x,y:vec0.y - vec1.y};
 }
 
-function Vector2Add(vec0,vec1)
+export function Vector2Add(vec0,vec1)
 {
 	return {x:vec0.x + vec1.x,y:vec0.y + vec1.y};
 }
 
-function HSL2RGB(h, s, l) 
+export function HSL2RGB(h, s, l) 
 {
 	var r, g, b;
 	if (s == 0) 
@@ -121,14 +121,14 @@ function HSL2RGB(h, s, l)
 	return (RGB(Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)));
 }
 
-function HSL2RGBA(h, s, l) 
+export function HSL2RGBA(h, s, l) 
 {
 	let temp = HSL2RGB(h, s, l);
 	temp.a = 255;
 	return (temp);
 }
 
-async function organizeArray(arr, parts) 
+export async function organizeArray(arr, parts) 
 {
 	let matrix = [];
 	let chunkSize = Math.ceil(arr.length / parts);
@@ -139,7 +139,7 @@ async function organizeArray(arr, parts)
 	return matrix;
 }
 
-async function autoOrganizeArray(arr) 
+export async function autoOrganizeArray(arr) 
 {
 	let matrix = [];
 	let parts = Math.ceil(Math.sqrt(arr.length));
@@ -151,7 +151,7 @@ async function autoOrganizeArray(arr)
 	return matrix;
 }
 
-function recursiveMap(arr, callback) 
+export function recursiveMap(arr, callback) 
 {
 	return arr.map(function(element) 
 	{
@@ -166,12 +166,12 @@ function recursiveMap(arr, callback)
 	});
 } 
 
-function flattenMatrix(matrix) 
+export function flattenMatrix(matrix) 
 {
 	return matrix.reduce((flatArray, currentRow) => flatArray.concat(currentRow), []);
 }
 
-function shuffleArray(arr) 
+export function shuffleArray(arr) 
 {
 	for (let i = arr.length - 1; i > 0; i--) 
 	{
@@ -181,12 +181,12 @@ function shuffleArray(arr)
 	return arr;
 }
 
-function Size(w, h) 
+export function Size(w, h) 
 {
 	var temp = { w: w, h: h }; temp.height = temp.h; temp.width = temp.w; return temp; 
 }
 
-function randomIntArray(start, end, size) 
+export function randomIntArray(start, end, size) 
 {
 	const result = [];
 	const range = end - start + 1;
@@ -197,7 +197,7 @@ function randomIntArray(start, end, size)
 	return result;
   }
 
-function getSizeInBytes(input) 
+export function getSizeInBytes(input) 
 {
 	if (typeof input == 'function') 
 		return (input.toString().length); 
@@ -209,7 +209,7 @@ function getSizeInBytes(input)
 //UTILS
 //-----------------------------------
 
-function roleta(...odds) 
+export function roleta(...odds) 
 {
 	var roleta = []; 
 	for(let i = 0; i<odds.length;i++)
@@ -217,7 +217,7 @@ function roleta(...odds)
 	return(shuffleArray(shuffleArray(shuffleArray(roleta)))[randomInRange(0, roleta.length - 1)]);
 }
 
-function repeatWithInterval(func, args, delay) 
+export function repeatWithInterval(func, args, delay) 
 {
 	function runFunc() 
 	{
@@ -232,7 +232,7 @@ function repeatWithInterval(func, args, delay)
 	return intervalHandle;
 }
 
-function repeatWithAnimationFrame(func, args) 
+export function repeatWithAnimationFrame(func, args) 
 {
 	function runFunc() 
 	{
@@ -250,7 +250,7 @@ function repeatWithAnimationFrame(func, args)
 	return animationFrameHandle;
 }
 
-async function expandMatrix(matrix) 
+export async function expandMatrix(matrix) 
 {
 	let finalMatrix = [];
 	let currentRow = 0;
@@ -276,7 +276,7 @@ async function expandMatrix(matrix)
 	return finalMatrix;
 }
 
-async function splitMatrix(matrix) 
+export async function splitMatrix(matrix) 
 {
 	let subMatrixSize = Math.ceil(matrix.length / 2);
 	let subMatrix1 = matrix.slice(0, subMatrixSize).map(x => x.slice(0, subMatrixSize));
@@ -286,7 +286,7 @@ async function splitMatrix(matrix)
 	return [[subMatrix1, subMatrix2], [subMatrix3, subMatrix4]];
 }
 
-async function customSplitMatrix(matrix, slices) 
+export async function customSplitMatrix(matrix, slices) 
 {
 	let subMatrixSize = Math.ceil(matrix.length / slices);
 	let subMatrices = [];
@@ -301,7 +301,7 @@ async function customSplitMatrix(matrix, slices)
 	return subMatrices;
 }
 
-async function customMarginalSplitMatrix(matrix, slices = 2, margin = 0) 
+export async function customMarginalSplitMatrix(matrix, slices = 2, margin = 0) 
 {
 	let subMatrixSize = Math.ceil(matrix.length / slices);
 	let subMatrix1 = matrix.slice(0, subMatrixSize + margin).map(x => x.slice(0, subMatrixSize + margin));
@@ -311,7 +311,7 @@ async function customMarginalSplitMatrix(matrix, slices = 2, margin = 0)
 	return [[subMatrix1, subMatrix2], [subMatrix3, subMatrix4]];
 }
 
-async function marginalSplitMatrix(matrix, margin = 8) 
+export async function marginalSplitMatrix(matrix, margin = 8) 
 {
 	let subMatrixSize = Math.ceil(matrix.length / 2);
 	let subMatrix1 = matrix.slice(0, subMatrixSize + margin).map(x => x.slice(0, subMatrixSize + margin));
@@ -321,7 +321,7 @@ async function marginalSplitMatrix(matrix, margin = 8)
 	return [[subMatrix1, subMatrix2], [subMatrix3, subMatrix4]];
 }
 
-async function divideMatrix(largeMatrix, slices) 
+export async function divideMatrix(largeMatrix, slices) 
 {
 	let dividedMatrix = [];
 	let sliceSize = Math.floor(largeMatrix.length / slices);
@@ -339,7 +339,7 @@ async function divideMatrix(largeMatrix, slices)
 	return dividedMatrix;
 }
 
-function create3DArray(dimX, dimY, dimZ, input) 
+export function create3DArray(dimX, dimY, dimZ, input) 
 {
 	const arr3D = [];
 
@@ -375,13 +375,13 @@ function create3DArray(dimX, dimY, dimZ, input)
 	return arr3D;
 }
 
-function regraDeTres(a, b, d) 
+export function regraDeTres(a, b, d) 
 {
 	const c = (a * d) / b;
 	return c;
 }
 
-function findMinMax(arr) 
+export function findMinMax(arr) 
 {
 	let min = Infinity;
 	let max = -Infinity;
@@ -409,7 +409,7 @@ function findMinMax(arr)
 	return { min, max };
   }
   
-function getUniqueValues(arr) 
+export function getUniqueValues(arr) 
 {
 	// flatten the input array
 	const flatArr = arr.flat(Infinity);
@@ -419,7 +419,7 @@ function getUniqueValues(arr)
 	return Array.from(uniqueSet);
   }
 
-function manualLength(arr) 
+export function manualLength(arr) 
 {
 	var count = 0;
 	while (true) 
@@ -431,7 +431,7 @@ function manualLength(arr)
 	}
 }
 
-function customFilter(array,property,value)
+export function customFilter(array,property,value)
 {
 	return(array.filter((element) => 
 	{
@@ -439,7 +439,7 @@ function customFilter(array,property,value)
 	}))
 }
 
-function LimitTo(value, min, max) 
+export function LimitTo(value, min, max) 
 {
 	if (value > max) {
 		while (value > max)
@@ -452,7 +452,7 @@ function LimitTo(value, min, max)
 	return value;
 }
 
-function ScaleTo(value, min, max) 
+export function ScaleTo(value, min, max) 
 {
 	if (value > max) {
 		while (value > max)
@@ -466,7 +466,7 @@ function ScaleTo(value, min, max)
 	return value;
 }
 
-function Pending(pendingList,frames, func, args) 
+export function Pending(pendingList,frames, func, args) 
 {
 	if (typeof frames != 'undefined' && typeof func != 'undefined') 
 	{
@@ -494,27 +494,27 @@ function Pending(pendingList,frames, func, args)
 	}
 }
 
-const randomInRange = function (min, max) 
+export function randomInRange(min, max) 
 { 
 	return Math.floor(Math.random() * (max - min + 1) + min); 
 }
-const randi = randomInRange
+export const randi = randomInRange
 
 //-----------------------------------
 //CALCULATE
 //-----------------------------------
 
-function FloatDifference(a, b) 
+export function FloatDifference(a, b) 
 { 
 	return ((a + b + Math.abs(a - b)) / 2); 
 }
 
-function Vector3Difference(vec1, vec2) 
+export function Vector3Difference(vec1, vec2) 
 { 
 	return (new Vector3(FloatDifference(vec1.x, vec2.x), FloatDifference(vec1.y, vec2.y), FloatDifference(vec1.z, vec2.z))); 
 }
 
-function RotateAroundPivot(point, pivot, angle) 
+export function RotateAroundPivot(point, pivot, angle) 
 {
 	angle = (angle) * (Math.PI / 180); // Convert to radians
 	var rotatedX = Math.cos(angle) * (point.x - pivot.x) - Math.sin(angle) * (point.z - pivot.z) + pivot.x;
@@ -526,7 +526,7 @@ function RotateAroundPivot(point, pivot, angle)
 //DEBUG
 //-----------------------------------
 
-function benchy(callback, args, optName = "unamed") 
+export function benchy(callback, args, optName = "unamed") 
 {
 	callback.name ??= optName;
 	console.time(callback.name);
@@ -537,7 +537,7 @@ function benchy(callback, args, optName = "unamed")
 	return (result);
 }
 
-async function abenchy(callback, args, optName = "unamed") 
+export async function abenchy(callback, args, optName = "unamed") 
 {
 	if (optName == "unamed" && callback.name.length > 0)
 		optName = callback.name;
@@ -549,7 +549,7 @@ async function abenchy(callback, args, optName = "unamed")
 	return (result)
 }
 
-function loadjs(scriptUrl, callback) {
+export function loadjs(scriptUrl, callback) {
     // Create a new script element
     const script = document.createElement('script');
 
@@ -568,7 +568,7 @@ function loadjs(scriptUrl, callback) {
     document.head.appendChild(script);
 }
 
-function multiloadjs(scriptUrls, callback) {
+export function multiloadjs(scriptUrls, callback) {
     const loadedScripts = [];
     let scriptsToLoad = scriptUrls.length;
 
@@ -591,7 +591,7 @@ function multiloadjs(scriptUrls, callback) {
     });
 }
 
-function multif(func,times)
+export function multif(func,times)
 {
 	let result = []
 	for (let index = 0; index < times; index++) 
@@ -601,7 +601,7 @@ function multif(func,times)
 	return result
 }
 
-function multifa(func,args)
+export function multifa(func,args)
 {
 	let result = []
 	for (let index = 0; index < args.length; index++) 
@@ -611,7 +611,7 @@ function multifa(func,args)
 	return result
 }
 
-function multifat(func,arg,times)
+export function multifat(func,arg,times)
 {
 	let result = []
 	for (let index = 0; index < times; index++) 
@@ -621,7 +621,7 @@ function multifat(func,arg,times)
 	return result
 }
 
-function multic(_class,times)
+export function multic(_class,times)
 {
 	let result = []
 	for (let index = 0; index < times; index++) 
@@ -631,7 +631,7 @@ function multic(_class,times)
 	return result
 }
 
-function multica(_class,args)
+export function multica(_class,args)
 {
 	let result = []
 	for (let index = 0; index < args.length; index++) 
@@ -641,7 +641,7 @@ function multica(_class,args)
 	return result
 }
 
-function multicat(_class,arg,times)
+export function multicat(_class,arg,times)
 {
 	let result = []
 	for (let index = 0; index < times; index++) 
@@ -651,7 +651,7 @@ function multicat(_class,arg,times)
 	return result
 }
 
-function newArray(size,value = 0)
+export function newArray(size,value = 0)
 {
 	let arr = []
 	for (let i = 0; i < size; i++) 
@@ -661,7 +661,7 @@ function newArray(size,value = 0)
 	return arr
 }
 
-function newMatrix(x,y,value = 0) 
+export function newMatrix(x,y,value = 0) 
 {
 	let matrix = []
 	for (let xx = 0; xx < x; xx++) 
