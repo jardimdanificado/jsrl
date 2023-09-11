@@ -9,11 +9,30 @@ export function checkSkill(creature,skill,minxp=0)
         return true
 }
 
+export function chanceSkill(creature, skill, minxp = 0, maxxp = 0) {
+    const total = maxxp - minxp;
+    const skillxp = (creature.skill[skill]?.xp || creature.skill[skill]) + (creature._skill_buffs[skill] || 0);
+
+    if (!creature.skill[skill] || skillxp <= minxp - 1) {
+        return false;
+    } else if (creature.skill[skill] && skillxp >= maxxp) {
+        return true;
+    } else if (creature.skill[skill] && total - (skillxp - minxp) > 1 && util.roleta(skillxp - minxp, total - (skillxp - minxp))) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
 export function move(session,creature, x, y) 
 {
     creature.update()
-    if (!checkSkill(creature,'walk',1)) 
-        return
+    if (chanceSkill(creature,'walk',1,40))
+    { 
+        console.log('you stumble')
+        return drawFrame(session);
+    }
     const tx = (x && x!=0) ? creature.position.x + x : creature.position.x;
     const ty = (y && y!=0) ? creature.position.y + y : creature.position.y;
     if (!session.checkCollision(tx, ty)) 
@@ -21,9 +40,15 @@ export function move(session,creature, x, y)
         creature.position.x = tx;
         creature.position.y = ty;
     } 
-    else if (session.map.tile[tx][ty] == 5 && session.map.door[tx][ty].open ==  false) 
+    else if (session.map.tile[tx][ty] == 5 && creature.skill.handle && session.map.door[tx][ty].open ==  false) 
     {
-        session.map.door[tx][ty].open = util.roleta(session.map.door[tx][ty].difficulty,1);
+        if (chanceSkill(creature,'handle',1,3)) 
+        {
+            console.log("you failed to open the door")
+            return drawFrame(session);
+        }
+        else
+            session.map.door[tx][ty].open = util.roleta(session.map.door[tx][ty].difficulty,1);
     }
     drawFrame(session);
 }
@@ -71,13 +96,13 @@ export class Creature
     {
         hp:100,
         mp:0,
-        waker:100,
+        food:100,
         drink:100,
         sleep:100,
 
         maxhp:100,
         maxmp:0,
-        maxwaker:100,
+        maxfood:100,
         maxdrink:100,
         maxsleep:100,
     }
@@ -85,22 +110,23 @@ export class Creature
     knowledge = {}
     skill = 
     {
-        learn:1,
-        remember:1
+        learn:new Skill('learn',1),
+        remember:new Skill('remember',1)
     }
     _skill_buffs = {}
     buff = []
     new = 
     {
-        skill:(name,xp,active=false)=>
+        skill:(name,xp,active=true)=>
         {
-            if (!checkSkill(this,"learn",1)) 
+            if (!chanceSkill(this,"learn",1,1)) 
                 return
             this.skill[name] = new Skill(name,xp,active) 
+            this.update()
         },
         memory:(actor, victim, action, what, when, where, buffs) =>
         {
-            if (!checkSkill(this,"remember",1)) 
+            if (!chanceSkill(this,"remember",1,2)) 
                 return
             let obj = new Memory(actor,victim,action,what,when,where,buffs)
             if (buffs) 
@@ -108,17 +134,20 @@ export class Creature
                 obj.buffs = buffs
             }
             this.memory.push(obj)
+            this.update()
         },
         knowledge:(name,content) =>
         {
-            if (!checkSkill(this,"remember",1) || !checkSkill(this,"learn",1)) 
+            if (!chanceSkill(this,"remember",1,2) || !chanceSkill(this,"learn",1,2)) 
                 return
             this.knowledge[name] = content
+            this.update()
             return this.knowledge[name]
         },
         buff:(type,description,group,value)=>
         {
             this.buff.push(new Buff(type,description,group,value))
+            this.update()
             return this.buff[this.buff.length]
         }
     }
@@ -150,6 +179,7 @@ export class Creature
         this.specime = specime
         this.knowntiles = util.newMatrix(session.map.tile.length,session.map.tile[0].length,false)
         this.viewingtiles = util.newMatrix(session.map.tile.length,session.map.tile[0].length,false)
+        this.update()
         if (!position) 
         {
             while (!session.tilename[session.map.tile[this.position.x][this.position.y]].includes("floor_")) 
@@ -185,12 +215,13 @@ export var creatures =
         creature.new.skill('pee',1)
         creature.new.skill('poop',1)
         creature.new.skill('think',1)
+        creature.new.skill('handle',1)
 
         let talkbuff = creature.new.buff('skill','i learned my name','speech',1)
         creature.new.memory('self_mom','self','named',0,{x:0,y:0},0,[talkbuff])
         
         let walkbuff = creature.new.buff('skill','i learned how to walk','walk',1)
-        creature.new.memory('self_mom','self','teached','walk',{x:0,y:0},0,[walkbuff])
+        creature.new.memory('self_mom','self','teached','walk',0,{x:0,y:0},[walkbuff])
         
         creature.new.knowledge("self_name",name)
         creature.new.knowledge("self_birth",birth)

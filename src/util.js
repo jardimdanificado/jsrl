@@ -380,6 +380,7 @@ export function regraDeTres(a, b, d)
 	const c = (a * d) / b;
 	return c;
 }
+export const regrad3 = regraDeTres
 
 export function findMinMax(arr) 
 {
@@ -651,22 +652,12 @@ export function multicat(_class,arg,times)
 	return result
 }
 
-export function newArray(size,value = 0)
-{
-	let arr = []
-	for (let i = 0; i < size; i++) 
-	{
-		arr.push(value)
-	}
-	return arr
-}
-
 export function newMatrix(x,y,value = 0) 
 {
 	let matrix = []
 	for (let xx = 0; xx < x; xx++) 
 	{
-		matrix.push(newArray(y,value))
+		matrix.push(Array(y).fill(value))
 	}
 	return matrix	
 }
