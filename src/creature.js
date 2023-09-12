@@ -25,23 +25,20 @@ export function xp(creature,skillname,amount,silent = true)
 {
     creature.skill[skillname].xp += amount
     if(!silent)
-        console.log('you just gained ' + amount + 'xp in ' + skillname + ' and now have ' + creature.skill[skillname].xp + 'xp in ' + skillname)
+        console.log('you just gained ' + amount + 'exp in ' + skillname + ' and now have ' + creature.skill[skillname].xp + 'exp in ' + skillname)
 }
 
 export function move(session,creature, x, y) 
 {
     creature.update()
-    
     const tx = (x && x!=0) ? creature.position.x + x : creature.position.x;
     const ty = (y && y!=0) ? creature.position.y + y : creature.position.y;
-    
-    
     
     if (session.map.tile[tx][ty] == 5 && creature.skill.handle && session.map.door[tx][ty].open == false) 
     {
         if (!chanceSkill(creature,'handle',1,((25*10)**2))) 
         {
-            console.log("you have failed to open the door")
+            console.log("you failed to open the door")
             xp(creature,'handle',util.roleta(93,7))
             return drawFrame(session);
         }
@@ -120,6 +117,12 @@ export class Creature
         food:100,
         drink:100,
         sleep:100,
+
+        decayhp:100,
+        decaymp:0,
+        decayfood:100,
+        decaydrink:100,
+        decaysleep:100,
 
         maxhp:100,
         maxmp:0,
