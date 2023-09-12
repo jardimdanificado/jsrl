@@ -9,26 +9,22 @@ export function checkSkill(creature,skill,minxp=0)
         return true
 }
 
-export function chanceSkill(creature, skill, minxp = 0, maxxp = 0) {
-    const total = maxxp - minxp;
-    const skillxp = (creature.skill[skill]?.xp || creature.skill[skill]) + (creature._skill_buffs[skill] || 0);
-
-    if (!creature.skill[skill] || skillxp <= minxp - 1) {
-        return false;
-    } else if (creature.skill[skill] && skillxp >= maxxp) {
-        return true;
-    } else if (creature.skill[skill] && total - (skillxp - minxp) > 1 && util.roleta(skillxp - minxp, total - (skillxp - minxp))) {
-        return true;
-    } else {
-        return false;
+export function chanceSkill(creature,skill,minxp=0,maxxp=1) 
+{
+    if (!creature.skill[skill] || creature.skill[skill].xp + creature._skill_buffs[skill] <= minxp-1) 
+        return false
+    else if (creature.skill[skill] && creature.skill[skill].xp + creature._skill_buffs[skill] > maxxp)
+    {
+        return true
     }
+    else
+        return util.roleta(1*util.ScaleTo(maxxp-minxp-(creature.skill[skill].xp + creature._skill_buffs[skill]-minxp),0,100),100) ? true : false
 }
-
 
 export function move(session,creature, x, y) 
 {
     creature.update()
-    if (chanceSkill(creature,'walk',1,40))
+    if (chanceSkill(creature,'walk',1,400))
     { 
         console.log('you stumble')
         return drawFrame(session);
@@ -42,7 +38,7 @@ export function move(session,creature, x, y)
     } 
     else if (session.map.tile[tx][ty] == 5 && creature.skill.handle && session.map.door[tx][ty].open ==  false) 
     {
-        if (chanceSkill(creature,'handle',1,3)) 
+        if (chanceSkill(creature,'handle',1,400)) 
         {
             console.log("you failed to open the door")
             return drawFrame(session);
@@ -119,14 +115,14 @@ export class Creature
     {
         skill:(name,xp,active=true)=>
         {
-            if (!chanceSkill(this,"learn",1,1)) 
+            if (chanceSkill(this,"learn",1,400)) 
                 return
             this.skill[name] = new Skill(name,xp,active) 
             this.update()
         },
         memory:(actor, victim, action, what, when, where, buffs) =>
         {
-            if (!chanceSkill(this,"remember",1,2)) 
+            if (chanceSkill(this,"remember",1,400)) 
                 return
             let obj = new Memory(actor,victim,action,what,when,where,buffs)
             if (buffs) 
@@ -138,7 +134,7 @@ export class Creature
         },
         knowledge:(name,content) =>
         {
-            if (!chanceSkill(this,"remember",1,2) || !chanceSkill(this,"learn",1,2)) 
+            if (chanceSkill(this,"remember",1,400) || chanceSkill(this,"learn",1,400)) 
                 return
             this.knowledge[name] = content
             this.update()
@@ -220,7 +216,7 @@ export var creatures =
         let talkbuff = creature.new.buff('skill','i learned my name','speech',1)
         creature.new.memory('self_mom','self','named',0,{x:0,y:0},0,[talkbuff])
         
-        let walkbuff = creature.new.buff('skill','i learned how to walk','walk',1)
+        let walkbuff = creature.new.buff('skill','i learned how to walk','walk',5)
         creature.new.memory('self_mom','self','teached','walk',0,{x:0,y:0},[walkbuff])
         
         creature.new.knowledge("self_name",name)
