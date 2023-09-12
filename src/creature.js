@@ -18,15 +18,16 @@ export function chanceSkill(creature,skill,minxp=0,maxxp=1)
         return true
     }
     else
-        return util.roleta(1*util.ScaleTo(maxxp-minxp-(creature.skill[skill].xp + creature._skill_buffs[skill]-minxp),0,100),100) ? true : false
+        return util.roleta(Math.floor(util.ScaleTo(maxxp-minxp-(creature.skill[skill].xp + creature._skill_buffs[skill]-minxp),0,100)),100) ? true : false
 }
 
 export function move(session,creature, x, y) 
 {
     creature.update()
-    if (chanceSkill(creature,'walk',1,400))
+    if (chanceSkill(creature,'walk',1,((25*10)**2)))
     { 
         console.log('you stumble')
+        creature.skill.walk.xp += 0.1
         return drawFrame(session);
     }
     const tx = (x && x!=0) ? creature.position.x + x : creature.position.x;
@@ -38,14 +39,17 @@ export function move(session,creature, x, y)
     } 
     else if (session.map.tile[tx][ty] == 5 && creature.skill.handle && session.map.door[tx][ty].open ==  false) 
     {
-        if (chanceSkill(creature,'handle',1,400)) 
+        if (chanceSkill(creature,'handle',1,((25*10)**2))) 
         {
             console.log("you failed to open the door")
+            creature.skill.handle.xp += 0.1
             return drawFrame(session);
         }
         else
             session.map.door[tx][ty].open = util.roleta(session.map.door[tx][ty].difficulty,1);
+        creature.skill.handle.xp += 1
     }
+    creature.skill.walk.xp += 1
     drawFrame(session);
 }
 
@@ -115,14 +119,12 @@ export class Creature
     {
         skill:(name,xp,active=true)=>
         {
-            if (chanceSkill(this,"learn",1,400)) 
-                return
             this.skill[name] = new Skill(name,xp,active) 
             this.update()
         },
         memory:(actor, victim, action, what, when, where, buffs) =>
         {
-            if (chanceSkill(this,"remember",1,400)) 
+            if (chanceSkill(this,"remember",1,((25*10)**2))) 
                 return
             let obj = new Memory(actor,victim,action,what,when,where,buffs)
             if (buffs) 
@@ -134,7 +136,7 @@ export class Creature
         },
         knowledge:(name,content) =>
         {
-            if (chanceSkill(this,"remember",1,400) || chanceSkill(this,"learn",1,400)) 
+            if (chanceSkill(this,"remember",1,((25*10)**2)) || chanceSkill(this,"learn",1,((25*10)**2))) 
                 return
             this.knowledge[name] = content
             this.update()
