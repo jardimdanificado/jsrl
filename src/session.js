@@ -1,4 +1,5 @@
 
+export var time = 0;
 export var tileSize = { x: 16, y: 16 };
 export var viewRange = 10;
 export var tilename = ['floor_r', 'wall_r', 'creature_human','floor_c','wall_c',"door_closed","door_open"];

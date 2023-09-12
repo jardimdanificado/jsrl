@@ -21,35 +21,56 @@ export function chanceSkill(creature,skill,minxp=0,maxxp=1)
         return util.roleta(Math.floor(util.ScaleTo(maxxp-minxp-(creature.skill[skill].xp + creature._skill_buffs[skill]-minxp),0,100)),100) ? true : false
 }
 
+export function xp(creature,skillname,amount,silent = true) 
+{
+    creature.skill[skillname].xp += amount
+    if(!silent)
+        console.log('you just gained ' + amount + 'xp in ' + skillname + ' and now have ' + creature.skill[skillname].xp + 'xp in ' + skillname)
+}
+
 export function move(session,creature, x, y) 
 {
     creature.update()
-    if (chanceSkill(creature,'walk',1,((25*10)**2)))
-    { 
-        console.log('you stumble')
-        creature.skill.walk.xp += 0.1
-        return drawFrame(session);
-    }
+    
     const tx = (x && x!=0) ? creature.position.x + x : creature.position.x;
     const ty = (y && y!=0) ? creature.position.y + y : creature.position.y;
+    
+    
+    
+    if (session.map.tile[tx][ty] == 5 && creature.skill.handle && session.map.door[tx][ty].open == false) 
+    {
+        if (!chanceSkill(creature,'handle',1,((25*10)**2))) 
+        {
+            console.log("you have failed to open the door")
+            xp(creature,'handle',util.roleta(93,7))
+            return drawFrame(session);
+        }
+        else
+        {
+            let result = util.roleta(session.map.door[tx][ty].difficulty,Math.floor(Math.sqrt(creature.skill.handle.xp/10)))
+            if (result) 
+            {
+                session.map.door[tx][ty].open = true
+                xp(creature,'handle',util.roleta(5,70,20,5))
+            }
+            else
+                xp(creature,'handle',util.roleta(30,70)) //70% of chance of getting xp
+        }
+    }
+    else if (chanceSkill(creature,'walk',1,((25*10)**2)))
+    { 
+        console.log('you stumble')
+        xp(creature,'walk',util.roleta(93,7))
+        return drawFrame(session);
+    }
+    
     if (!session.checkCollision(tx, ty)) 
     {
         creature.position.x = tx;
         creature.position.y = ty;
     } 
-    else if (session.map.tile[tx][ty] == 5 && creature.skill.handle && session.map.door[tx][ty].open ==  false) 
-    {
-        if (chanceSkill(creature,'handle',1,((25*10)**2))) 
-        {
-            console.log("you failed to open the door")
-            creature.skill.handle.xp += 0.1
-            return drawFrame(session);
-        }
-        else
-            session.map.door[tx][ty].open = util.roleta(session.map.door[tx][ty].difficulty,1);
-        creature.skill.handle.xp += 1
-    }
-    creature.skill.walk.xp += 1
+
+    //console.log(creature.skill.handle.xp);
     drawFrame(session);
 }
 

@@ -268,7 +268,7 @@ _map.tile.forEach((element,x) =>
             {
                 if (element == 5) 
                 {
-                    _map.door[x][y] = new Door({x:x,y:y},false)
+                    _map.door[x][y] = new Door({x:x,y:y},false,48)
                 }
             }
         );
