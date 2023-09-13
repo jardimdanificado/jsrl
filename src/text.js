@@ -238,6 +238,7 @@ export function printText(session,txt,position)
     const ctx = canvas.getContext('2d');
     for (let index = 0; index < txt.length; index++) 
     {
-        ctx.drawImage(session.alphabet[txt[index]], position.x+(8*index), position.y);
+        if(txt[index] !== ' ')
+           ctx.drawImage(session.alphabet[txt[index]], position.x+(8*index), position.y);
     }
 }
