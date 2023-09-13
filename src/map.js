@@ -5,12 +5,19 @@ export var _map = {}
 
 _map.tile = DungeonGenerator.generate({
     maxRoomSize: 15,
-    minRoomSize: 3,
+    minRoomSize: 0,
     padding: 0,
     rooms: 25,
     rows: 41,
     cols: 61,
 });
+
+/*
+-1  = hole
+0   = floor
+1   = wall 
+5   = door 
+*/ 
 
 _map.door = util.newMatrix(41,61,false)
 
@@ -112,123 +119,6 @@ _map.tile = util.matrixReplace(_map.tile,
 
 _map.tile = util.matrixReplace(_map.tile,
     [
-        [1],
-        [0],
-        [1]
-    ],
-    [
-        [4],
-        [3],
-        [4]
-    ]
-)
-
-_map.tile = util.matrixReplace(_map.tile,
-    [
-        [5],
-        [0],
-        [1]
-    ],
-    [
-        [5],
-        [3],
-        [4]
-    ]
-)
-
-_map.tile = util.matrixReplace(_map.tile,
-    [
-        [1],
-        [0],
-        [5]
-    ],
-    [
-        [4],
-        [3],
-        [5]
-    ]
-)
-
-
-_map.tile = util.matrixReplace(_map.tile,
-    [
-        [1,0,1],
-        []
-    ],
-    [
-        [4,3,4],
-        []
-    ]
-)
-
-_map.tile = util.matrixReplace(_map.tile,
-    [
-        [1,0,5],
-        []
-    ],
-    [
-        [4,3,5],
-        []
-    ]
-)
-
-_map.tile = util.matrixReplace(_map.tile,
-    [
-        [5,0,1],
-        []
-    ],
-    [
-        [5,3,4],
-        []
-    ]
-)
-
-_map.tile = util.matrixReplace(_map.tile,
-    [
-        [4],
-        [0]
-    ],
-    [
-        [1],
-        [0]
-    ]
-)
-
-_map.tile = util.matrixReplace(_map.tile,
-    [
-        [0],
-        [4]
-    ],
-    [
-        [0],
-        [1]
-    ]
-)
-
-_map.tile = util.matrixReplace(_map.tile,
-    [
-        [0,4],
-        []
-    ],
-    [
-        [0,1],
-        []
-    ]
-)
-
-_map.tile = util.matrixReplace(_map.tile,
-    [
-        [4,0],
-        []
-    ],
-    [
-        [1,0],
-        []
-    ]
-)
-
-_map.tile = util.matrixReplace(_map.tile,
-    [
         [5,1,5],
         []
     ],
@@ -250,6 +140,86 @@ _map.tile = util.matrixReplace(_map.tile,
         [1]
     ]
 )
+
+_map.tile = util.matrixReplace(_map.tile,
+    [
+        [1,1,1],
+        [1,0,1],
+        [1,1,1],
+    ],
+    [
+        [1,1,1],
+        [1,1,1],
+        [1,1,1]
+    ]
+)
+
+let ptts = 
+[
+    [[0,0,5]],
+    [[5,0,0]],
+    [[5,0,5]]
+]
+
+_map.tile = util.matrixReplace(_map.tile,
+    [
+        [5,0,5],
+    ],
+    ptts[util.roleta(10,10,5)]
+)
+
+ptts = 
+[
+    [
+        [0],
+        [0],
+        [5]
+    ],
+    [
+        [5],
+        [0],
+        [0]
+    ],
+    [
+        [5],
+        [0],
+        [5]
+    ],
+]
+
+_map.tile = util.matrixReplace(_map.tile,
+    [
+        [5],
+        [0],
+        [5]
+    ],
+    ptts[util.roleta(10,10,5)]
+)
+
+ptts = 
+[
+    [
+        [5,undefined],
+        [undefined,0]
+    ],
+    [
+        [0,undefined],
+        [undefined,5]
+    ],
+    [
+        [5,undefined],
+        [undefined,5]
+    ]
+]
+
+_map.tile = util.matrixReplace(_map.tile,
+    [
+        [5,undefined],
+        [undefined,5]
+    ],
+    ptts[util.roleta(10,10,5)]
+)
+
 
 export class Door
 {

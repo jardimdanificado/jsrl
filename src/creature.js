@@ -33,7 +33,7 @@ export function move(session,creature, x, y)
     creature.update()
     const tx = (x && x!=0) ? creature.position.x + x : creature.position.x;
     const ty = (y && y!=0) ? creature.position.y + y : creature.position.y;
-    
+    creature.decay.need()
     if (session.map.tile[tx][ty] == 5 && creature.skill.handle && session.map.door[tx][ty].open == false) 
     {
         if (!chanceSkill(creature,'handle',1,((25*10)**2))) 
@@ -69,6 +69,17 @@ export function move(session,creature, x, y)
 
     //console.log(creature.skill.handle.xp);
     drawFrame(session);
+}
+
+export class Need
+{
+    constructor(name,decay=-1,max=100)
+    {
+        this.name = name
+        this.decay = decay
+        this.value = max
+        this.max = max
+    }
 }
 
 export class Buff 
@@ -110,25 +121,13 @@ export class Creature
 {
     specime = 'human'
     position = { x: 15, y: 15 }
-    body = 
+    need = 
     {
-        hp:100,
-        mp:0,
-        food:100,
-        drink:100,
-        sleep:100,
-
-        decayhp:100,
-        decaymp:0,
-        decayfood:100,
-        decaydrink:100,
-        decaysleep:100,
-
-        maxhp:100,
-        maxmp:0,
-        maxfood:100,
-        maxdrink:100,
-        maxsleep:100,
+        hp:new Need('hp',0,100),
+        mp:new Need('mp',0,0),
+        food:new Need('food',-0.1,100),
+        drink:new Need('drink',-0.2,100),
+        sleep:new Need('sleep',-0.1,100),
     }
     memory = []
     knowledge = {}
@@ -175,8 +174,35 @@ export class Creature
     }
     delete = 
     {
-        skill:(name)=>{
+        skill:(name)=>
+        {
             this.skill[name] = undefined
+        }
+    }
+    decay = 
+    {
+        need:(name)=>
+        {
+            
+            if (name) 
+            {
+                if ( (this.need[name] + this.need[name].decay >= 0) && (this.need[name] + this.need[name].decay <= this.need[name].max)) 
+                {
+                    this.need[name] += this.need[name].decay
+                }
+            }
+            else
+            {
+                let ks = Object.keys(this.need)
+                for (let index = 0; index < ks.length; index++) 
+                {
+                    name = ks[index]
+                    if ( (this.need[name].value + this.need[name].decay >= 0) && (this.need[name].value + this.need[name].decay <= this.need[name].max)) 
+                    {
+                        this.need[name].value += this.need[name].decay
+                    }
+                }
+            }
         }
     }
     update = ()=>

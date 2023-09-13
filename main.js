@@ -4,6 +4,9 @@ import * as creature from "./src/creature.js"
 import { set_keydown,spawndebugbuttons } from "./src/input.js"
 import { drawFrame } from "./src/render.js"
 
+if(_session != undefined)
+    _session = session
+
 set_keydown(session)
 var creatures = creature.creatures
 
