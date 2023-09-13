@@ -1,3 +1,5 @@
+import * as text from "./text.js";
+
 export function drawFrame(session) 
 {
     const canvas = document.getElementById('canvas');
@@ -27,7 +29,7 @@ export function drawFrame(session)
             }
         }
     }
-    
+    text.printText(session,'%#$@!!:;?]~`AaBcD45',{x:8,y:8})
     // Add the player image
     ctx.drawImage(session.getTile('creature_human'), session.viewRange * session.tileSize.x, (session.viewRange) * session.tileSize.y);
 }

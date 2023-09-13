@@ -3,6 +3,7 @@ import * as session from "./src/session.js"
 import * as creature from "./src/creature.js"
 import { set_keydown,spawndebugbuttons } from "./src/input.js"
 import { drawFrame } from "./src/render.js"
+import * as text from "./src/text.js"
 
 if(_session != undefined)
     _session = session
@@ -33,12 +34,14 @@ function loadImages() {
         });
     });
 
+    text.loadAlphabet(session,imagePromises,loadImage)
+
     return Promise.all(imagePromises);
 }
 
 
 
-function initialize() 
+function initialize()
 {
     const canvas = document.getElementById('canvas');
     canvas.width = session.screen.x;

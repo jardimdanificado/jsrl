@@ -27,6 +27,11 @@ export function set_keydown(session)
           // Ação a ser executada quando a tecla Enter é liberada
           console.log(session.creature[0]);
         }
+        if (event.key === 'k') 
+        {
+          // Ação a ser executada quando a tecla Enter é liberada
+          console.log(session);
+        }
     });      
 }
 

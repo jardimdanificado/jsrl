@@ -26,3 +26,5 @@ export function checkCollision(x,y)
     else
         return !(map.door[x][y].open)
 }
+
+export var alphabet = []

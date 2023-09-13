@@ -661,3 +661,16 @@ export function newMatrix(x,y,value = 0)
 	}
 	return matrix	
 }
+
+export function clearDocumentListeners()
+{
+	const eventTypes = getEventListeners(document);
+	for (const eventType in eventTypes) {
+		if (eventTypes.hasOwnProperty(eventType)) {
+			eventTypes[eventType].forEach(listener => {
+				document.removeEventListener(eventType, listener.listener);
+			});
+		}
+	}
+
+}
