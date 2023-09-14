@@ -1,10 +1,16 @@
 
-export var time = 0;
+export var world = {time:0};
 export var tileSize = { x: 16, y: 16 };
 export var viewRange = 10;
 export var tilename = ['floor_r', 'wall_r', 'creature_human','floor_c','wall_c',"door_closed","door_open"];
 export var tileset = [];
 export var creature = [];
+export var ui = await import('./ui.js')
+export var mouse = 
+{
+    position:{x:0,y:0},
+    draggin: false,
+}
 export var screen = 
 {
     x: (viewRange * 2 + 1) * tileSize.x,
@@ -28,3 +34,6 @@ export function checkCollision(x,y)
 }
 
 export var alphabet = []
+
+var scrollBox = document.querySelector('.logbox');
+scrollBox.style.width = (((viewRange * 2 + 1) * tileSize.x)-2) + 'px';

@@ -32,4 +32,5 @@ export function drawFrame(session)
     text.printText(session,'you failed to open the door',{x:8,y:8})
     // Add the player image
     ctx.drawImage(session.getTile('creature_human'), session.viewRange * session.tileSize.x, (session.viewRange) * session.tileSize.y);
+    session.world.time += 1
 }

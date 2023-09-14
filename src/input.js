@@ -35,6 +35,19 @@ export function set_keydown(session)
     });      
 }
 
+export function defaultMouseMove(session) 
+{
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+
+    canvas.addEventListener('mousemove', function (e) {
+        var rect = canvas.getBoundingClientRect(); // Obtém as coordenadas do canvas
+        var mouseX = e.clientX - rect.left; // Posição do mouse em relação ao canto esquerdo do canvas
+        var mouseY = e.clientY - rect.top; // Posição do mouse em relação ao canto superior do canvas   
+        
+    });
+}
+
 export function spawndebugbuttons(session) 
 {
     let button = document.createElement('button');

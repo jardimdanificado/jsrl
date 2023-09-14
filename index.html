@@ -10,6 +10,19 @@
     <canvas id="canvas"></canvas>
     <script>
         _session = {}
+        _ver = 0.024
+    </script>
+    <div class="logbox" id="scrollBox"></div>
+    <script>
+        var scrollBox = document.getElementById('scrollBox');
+        scrollBox.textContent = '> ' + "jsrl" + _ver + ';'
+        function _logbox(...content)
+        {
+            for (let i = 0; i < content.length; i++) 
+            {
+                scrollBox.textContent = _session.world.time + 's> ' + content[i] + '\n' + scrollBox.textContent
+            }
+        }
     </script>
     <script src="main.js" type="module"></script>
 </body>

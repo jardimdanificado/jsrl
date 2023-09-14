@@ -24,3 +24,13 @@ button {
     height: 50px;
     font-size: 24px;
 }
+
+.logbox {
+    width: 300px;
+    height: 200px;
+    border: 1px solid #ccc;
+    overflow-y: scroll; /* Adiciona a barra de rolagem quando o conteúdo excede o tamanho do retângulo */
+    overflow-x: hidden; /* Adiciona a barra de rolagem quando o conteúdo excede o tamanho do retângulo */
+    white-space: pre-wrap;
+    font-size:medium;
+}

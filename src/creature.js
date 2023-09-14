@@ -21,11 +21,11 @@ export function chanceSkill(creature,skill,minxp=0,maxxp=1)
         return util.roleta(Math.floor(util.ScaleTo(maxxp-minxp-(creature.skill[skill].xp + creature._skill_buffs[skill]-minxp),0,100)),100) ? true : false
 }
 
-export function xp(creature,skillname,amount,silent = true) 
+export function xp(creature,skillname,amount,silent = false) 
 {
     creature.skill[skillname].xp += amount
-    if(!silent)
-        console.log('you just gained ' + amount + 'exp in ' + skillname + ' and now have ' + creature.skill[skillname].xp + 'exp in ' + skillname)
+    if(!silent && amount > 0)
+        _logbox('you just gained ' + amount + 'exp in ' + skillname + ' and now have ' + creature.skill[skillname].xp + 'exp in ' + skillname)
 }
 
 export function move(session,creature, x, y) 
@@ -38,7 +38,7 @@ export function move(session,creature, x, y)
     {
         if (!chanceSkill(creature,'handle',1,((25*10)**2))) 
         {
-            console.log("you failed to open the door")
+            _logbox("you failed to open the door")
             xp(creature,'handle',util.roleta(93,7))
             return drawFrame(session);
         }
@@ -56,7 +56,7 @@ export function move(session,creature, x, y)
     }
     else if (chanceSkill(creature,'walk',1,((25*10)**2)))
     { 
-        console.log('you stumble')
+        _logbox('you stumble')
         xp(creature,'walk',util.roleta(93,7))
         return drawFrame(session);
     }
@@ -67,7 +67,6 @@ export function move(session,creature, x, y)
         creature.position.y = ty;
     } 
 
-    //console.log(creature.skill.handle.xp);
     drawFrame(session);
 }
 
