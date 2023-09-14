@@ -672,5 +672,9 @@ export function clearDocumentListeners()
 			});
 		}
 	}
+}
 
+export function recurse(object,subname) 
+{
+	return(object[subname])
 }

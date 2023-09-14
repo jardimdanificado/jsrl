@@ -11,7 +11,6 @@ if(_session != undefined)
 set_keydown(session)
 var creatures = creature.creatures
 
-
 // Function to load an image as a Promise
 function loadImage(src) 
 {
@@ -38,8 +37,6 @@ function loadImages() {
 
     return Promise.all(imagePromises);
 }
-
-
 
 function initialize()
 {

@@ -73,12 +73,13 @@ export function move(session,creature, x, y)
 
 export class Need
 {
-    constructor(name,decay=-1,max=100)
+    constructor(name,decay=-1,max=100,affects)
     {
         this.name = name
         this.decay = decay
         this.value = max
         this.max = max
+        this.affects = affects
     }
 }
 
@@ -95,11 +96,12 @@ export class Buff
 
 export class Skill
 {
-    constructor(name,xp,active=true)
+    constructor(name,xp,active=true,decay = 0)
     {
         this.name = name
         this.active = active
         this.xp = xp
+        this.decay = decay
     }
 }
 
@@ -125,9 +127,9 @@ export class Creature
     {
         hp:new Need('hp',0,100),
         mp:new Need('mp',0,0),
-        food:new Need('food',-0.1,100),
-        drink:new Need('drink',-0.2,100),
-        sleep:new Need('sleep',-0.1,100),
+        food:new Need('food',-0.1,100,'hp'),
+        drink:new Need('drink',-0.2,100,'hp'),
+        sleep:new Need('sleep',-0.1,100,'mp'),
     }
     memory = []
     knowledge = {}
@@ -197,9 +199,18 @@ export class Creature
                 for (let index = 0; index < ks.length; index++) 
                 {
                     name = ks[index]
-                    if ( (this.need[name].value + this.need[name].decay >= 0) && (this.need[name].value + this.need[name].decay <= this.need[name].max)) 
+                    this.need[name].value += this.need[name].decay
+                    
+                    if (this.need[name].value < 0)
                     {
                         this.need[name].value += this.need[name].decay
+                        if (this.need[name].affects) 
+                        {
+                            for (const aneed of this.need[name].affects) 
+                            {
+                                aneed.decay += this.need[name].value
+                            }
+                        }                        
                     }
                 }
             }
