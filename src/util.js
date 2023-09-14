@@ -678,3 +678,5 @@ export function recurse(object,subname)
 {
 	return(object[subname])
 }
+
+export function emptyfunc() {}

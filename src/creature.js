@@ -73,13 +73,13 @@ export function move(session,creature, x, y)
 
 export class Need
 {
-    constructor(name,decay=-1,max=100,affects)
+    constructor(name,decay=-1,max=100,func = util.emptyfunc)
     {
         this.name = name
         this.decay = decay
         this.value = max
         this.max = max
-        this.affects = affects
+        this.func = func
     }
 }
 
@@ -119,18 +119,67 @@ export class Memory
     }
 }
 
+let fneeds = 
+{
+    hp:function(session,creature) 
+    {
+        if (creature.need.hp <= 0) 
+        {
+            for (const skill of creature.skill) 
+            {
+                skill.value = -Infinity
+            }
+        }
+    },
+    mp:function(session,creature)
+    {
+
+    },
+    food:function(session,creature)
+    {
+        if (creature.need.drink.decay < 0)
+        {
+            creature.need.hp.value += creature.need.drink.decay
+        }
+        
+    },
+    drink:function(session,creature)
+    {
+        if (creature.need.drink.decay < 0) 
+        {
+            if (creature.need.mp.value + creature.need.drink.decay < 0) 
+            {
+                if (creature.need.mp>0) 
+                {
+                    creature.need.mp = 0
+                }
+            }
+            else if (creature.need.mp.value + creature.need.drink.decay > 0) 
+            {
+                creature.need.mp.value += creature.need.drink.decay
+            }
+            creature.need.hp.value += creature.need.drink.decay/4
+        }
+    },
+    sleep:function(session,creature)
+    {
+
+    },
+    psy:function(session,creature)
+    {
+        
+    },
+    karma:function(session,creature)
+    {
+        
+    },
+}
+
 export class Creature 
 {
     specime = 'human'
     position = { x: 15, y: 15 }
-    need = 
-    {
-        hp:new Need('hp',0,100),
-        mp:new Need('mp',0,0),
-        food:new Need('food',-0.1,100,'hp'),
-        drink:new Need('drink',-0.2,100,'hp'),
-        sleep:new Need('sleep',-0.1,100,'mp'),
-    }
+    need = {}
     memory = []
     knowledge = {}
     skill = 
@@ -142,6 +191,15 @@ export class Creature
     buff = []
     new = 
     {
+        need:(session,name,decay,max,func = util.emptyfunc) => 
+        {
+            let funcwrapper = ()=>
+            {
+                return func(session,this)
+            }
+            this.need[name] = new Need(name,decay,max,funcwrapper)
+            return this.need[name]
+        },
         skill:(name,xp,active=true)=>
         {
             this.skill[name] = new Skill(name,xp,active) 
@@ -184,8 +242,7 @@ export class Creature
     decay = 
     {
         need:(name)=>
-        {
-            
+        {   
             if (name) 
             {
                 if ( (this.need[name] + this.need[name].decay >= 0) && (this.need[name] + this.need[name].decay <= this.need[name].max)) 
@@ -200,22 +257,12 @@ export class Creature
                 {
                     name = ks[index]
                     this.need[name].value += this.need[name].decay
-                    
-                    if (this.need[name].value < 0)
-                    {
-                        this.need[name].value += this.need[name].decay
-                        if (this.need[name].affects) 
-                        {
-                            for (const aneed of this.need[name].affects) 
-                            {
-                                aneed.decay += this.need[name].value
-                            }
-                        }                        
-                    }
+                    this.need[name].func()
                 }
             }
         }
     }
+
     update = ()=>
     {
         this._skill_buffs = {}
@@ -233,8 +280,21 @@ export class Creature
             }
         }
     }
+
     constructor(session,specime = 'human', position) 
     {
+        this._need_buffs = {} 
+        this.need = 
+        {
+            hp:this.new.need(session,'hp',0,100,fneeds.hp),
+            mp:this.new.need(session,'mp',0,0,fneeds.mp),
+            food:this.new.need(session,'food',-0.1,100,fneeds.food),
+            drink:this.new.need(session,'drink',-0.2,100,fneeds.drink),
+            sleep:this.new.need(session,'sleep',-0.1,100,fneeds.sleep),
+            psy:this.new.need(session,'psy',0,100,fneeds.psy),
+            karma:this.new.need(session,'karma',0,100,fneeds.karma),
+        }
+
         this.specime = specime
         this.knowntiles = util.newMatrix(session.map.tile.length,session.map.tile[0].length,false)
         this.viewingtiles = util.newMatrix(session.map.tile.length,session.map.tile[0].length,false)
