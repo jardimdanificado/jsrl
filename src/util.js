@@ -679,4 +679,45 @@ export function recurse(object,subname)
 	return(object[subname])
 }
 
+export function splitSpriteSheet(spritesheet, largura, altura, corTransparente) {
+    const partes = [];
+    for (let y = 0; y < spritesheet.height; y += altura) {
+        for (let x = 0; x < spritesheet.width; x += largura) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = largura;
+            canvas.height = altura;
+
+            ctx.clearRect(0, 0, largura, altura);
+            ctx.drawImage(spritesheet, x, y, largura, altura, 0, 0, largura, altura);
+
+            if (corTransparente) {
+                const imageData = ctx.getImageData(0, 0, largura, altura);
+                for (let i = 0; i < imageData.data.length; i += 4) {
+                    const red = imageData.data[i];
+                    const green = imageData.data[i + 1];
+                    const blue = imageData.data[i + 2];
+                    if (
+                        red === corTransparente[0] &&
+                        green === corTransparente[1] &&
+                        blue === corTransparente[2]
+                    ) {
+                        imageData.data[i + 3] = 0; // Define o canal alfa como zero (transparente)
+                    }
+                }
+                ctx.putImageData(imageData, 0, 0);
+            }
+
+            const image = new Image();
+            image.src = canvas.toDataURL();
+
+            partes.push(image);
+        }
+    }
+
+    return partes;
+}
+
+
+
 export function emptyfunc() {}

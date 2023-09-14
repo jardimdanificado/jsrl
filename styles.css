@@ -27,10 +27,14 @@ button {
 
 .logbox {
     width: 300px;
-    height: 200px;
+    height: 12px;
     border: 1px solid #ccc;
-    overflow-y: scroll; /* Adiciona a barra de rolagem quando o conteúdo excede o tamanho do retângulo */
-    overflow-x: hidden; /* Adiciona a barra de rolagem quando o conteúdo excede o tamanho do retângulo */
+    overflow-y: visible; 
+    overflow-x: hidden; 
     white-space: pre-wrap;
-    font-size:medium;
+    font-size:small;
+    resize: vertical; 
+    min-height: 12px; 
+    background-color:rgb(255, 254, 242);
+    color:rgb(61, 61, 61);
 }

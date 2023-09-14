@@ -4,18 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <title>Tile Rendering</title>
+    <title>a festa da mosca</title>
+    <link rel="icon" type="image/x-icon" href="./data/icon/icon64.ico">
 </head>
 <body>
     <canvas id="canvas"></canvas>
     <script>
         _session = {}
-        _ver = 0.024
+        _ver = 0.025
+        _name = 'a festa da mosca'
     </script>
     <div class="logbox" id="scrollBox"></div>
     <script>
         var scrollBox = document.getElementById('scrollBox');
-        scrollBox.textContent = '> ' + "jsrl" + _ver + ';'
+        scrollBox.textContent = '> ' + "mosca" + _ver + ';'
         function _logbox(...content)
         {
             for (let i = 0; i < content.length; i++) 
@@ -23,6 +25,7 @@
                 scrollBox.textContent = _session.world.time + 's> ' + content[i] + '\n' + scrollBox.textContent
             }
         }
+        //_logbox('\n')
     </script>
     <script src="main.js" type="module"></script>
 </body>

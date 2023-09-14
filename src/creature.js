@@ -25,7 +25,7 @@ export function xp(creature,skillname,amount,silent = false)
 {
     creature.skill[skillname].xp += amount
     if(!silent && amount > 0)
-        _logbox('you just gained ' + amount + 'exp in ' + skillname + ' and now have ' + creature.skill[skillname].xp + 'exp in ' + skillname)
+        _logbox('+' + amount + ' exp in ' + skillname + '. total: ' + creature.skill[skillname].xp)
 }
 
 export function move(session,creature, x, y) 
@@ -56,13 +56,13 @@ export function move(session,creature, x, y)
     }
     else if (chanceSkill(creature,'walk',1,((25*10)**2)))
     { 
-        _logbox('you stumble')
-        xp(creature,'walk',util.roleta(93,7))
+        _logbox((creature.knowledge.self_name || creature.specime) + ' stumbles')
+        xp(creature,'walk',util.roleta(6,4))
         return drawFrame(session);
     }
-    
-    if (!session.checkCollision(tx, ty)) 
+    else if (!session.checkCollision(tx, ty)) 
     {
+        xp(creature,'walk',util.roleta(4,7))
         creature.position.x = tx;
         creature.position.y = ty;
     } 
@@ -218,8 +218,6 @@ export class Creature
         },
         knowledge:(name,content) =>
         {
-            if (chanceSkill(this,"remember",1,((25*10)**2)) || chanceSkill(this,"learn",1,((25*10)**2))) 
-                return
             this.knowledge[name] = content
             this.update()
             return this.knowledge[name]
