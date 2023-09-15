@@ -31,5 +31,4 @@ export function drawFrame(session)
     text.printText(session,_name + ' v' + _ver,{x:0,y:canvas.height-8})
     // Add the player image
     ctx.drawImage(session.getTile('creature_human'), session.viewRange * session.tileSize.x, (session.viewRange) * session.tileSize.y);
-    session.world.time += 1
 }

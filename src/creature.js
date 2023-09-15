@@ -1,5 +1,5 @@
 import * as util from "./util.js"
-import {drawFrame} from "./render.js"
+import {doFrame} from "./frame.js"
 
 export function checkSkill(creature,skill,minxp=0) 
 {
@@ -40,7 +40,7 @@ export function move(session,creature, x, y)
         {
             _logbox("you failed to open the door")
             xp(creature,'handle',util.roleta(93,7))
-            return drawFrame(session);
+            return doFrame(session);
         }
         else
         {
@@ -58,7 +58,6 @@ export function move(session,creature, x, y)
     { 
         _logbox((creature.knowledge.self_name || creature.specime) + ' stumbles')
         xp(creature,'walk',util.roleta(6,4))
-        return drawFrame(session);
     }
     else if (!session.checkCollision(tx, ty)) 
     {
@@ -66,8 +65,7 @@ export function move(session,creature, x, y)
         creature.position.x = tx;
         creature.position.y = ty;
     } 
-
-    drawFrame(session);
+    doFrame(session);
 }
 
 export class Need

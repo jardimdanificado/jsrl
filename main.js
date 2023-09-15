@@ -2,7 +2,7 @@ import * as util from "./src/util.js"
 import * as session from "./src/session.js"
 import * as creature from "./src/creature.js"
 import { set_keydown,spawndebugbuttons } from "./src/input.js"
-import { drawFrame } from "./src/render.js"
+import { doFrame } from "./src/frame.js"
 import * as text from "./src/text.js"
 
 if(_session != undefined)
@@ -50,7 +50,7 @@ function initialize()
 loadImages()
     .then(() => {
         initialize(); // Initialize after all images are loaded
-        drawFrame(session); // Render the first frame immediately
+        doFrame(session); // Render the first frame immediately
     })
     .catch((error) => {
         console.error('Failed to load images:', error);
