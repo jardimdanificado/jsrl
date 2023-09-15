@@ -14,21 +14,35 @@ export function drawFrame(session)
     {
         for (let y = startY; y <= session.creature[0].position.y + session.viewRange; y++) 
         {
-            if (x >= 0 && y >= 0 && x < session.map.tile.length && y < session.map.tile[x].length) 
+            if (x >= 0 && y >= 0 && x < session.map.collision.length && y < session.map.collision[x].length) 
             {
                 const tileX = (x - startX) * session.tileSize.x;
                 const tileY = (y - startY) * session.tileSize.y;
-                if (session.map.tile[x][y] == 5) 
+                let sprite
+                switch (session.map.collision[x][y]) 
                 {
-                    let sprite = session.map.door[x][y].open ? 6 : 5;
-                    ctx.drawImage(session.tileset[sprite], tileX, tileY);
+                    case 0:
+                        sprite = session.tilelink[session.style.floor]
+                        break;
+                    case 5:
+                        sprite = session.tilelink[session.style.floor]
+                        break;
+                    case 1:
+                        sprite = session.tilelink[session.style.wall]
+                        break;
+                    default:
+                        break;
                 }
-                else
-                    ctx.drawImage(session.tileset[session.map.tile[x][y]], tileX, tileY);
+                ctx.drawImage(sprite, tileX, tileY);
+                if (session.map.collision[x][y] == 5) 
+                {
+                    sprite = session.tilelink[session.style[session.map.door[x][y].open == true?'door_open':'door_closed']]
+                    ctx.drawImage(sprite, tileX, tileY);
+                }
             }
         }
     }
     text.printText(session,_name + ' v' + _ver,{x:0,y:canvas.height-8})
     // Add the player image
-    ctx.drawImage(session.getTile('creature_human'), session.viewRange * session.tileSize.x, (session.viewRange) * session.tileSize.y);
+    ctx.drawImage(session.tileset.humanoid[0], session.viewRange * session.tileSize.x, (session.viewRange) * session.tileSize.y);
 }

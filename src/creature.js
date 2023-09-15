@@ -34,7 +34,7 @@ export function move(session,creature, x, y)
     const tx = (x && x!=0) ? creature.position.x + x : creature.position.x;
     const ty = (y && y!=0) ? creature.position.y + y : creature.position.y;
     creature.decay.need()
-    if (session.map.tile[tx][ty] == 5 && creature.skill.handle && session.map.door[tx][ty].open == false) 
+    if (session.map.collision[tx][ty] == 5 && creature.skill.handle && session.map.door[tx][ty].open == false) 
     {
         if (!chanceSkill(creature,'handle',1,((25*10)**2))) 
         {
@@ -291,15 +291,15 @@ export class Creature
         }
 
         this.specime = specime
-        this.knowntiles = util.newMatrix(session.map.tile.length,session.map.tile[0].length,false)
-        this.viewingtiles = util.newMatrix(session.map.tile.length,session.map.tile[0].length,false)
+        this.knowntiles = util.newMatrix(session.map.collision.length,session.map.collision[0].length,false)
+        this.viewingtiles = util.newMatrix(session.map.collision.length,session.map.collision[0].length,false)
         this.update()
         if (!position) 
         {
-            while (!session.tilename[session.map.tile[this.position.x][this.position.y]].includes("floor_")) 
+            while (session.map.collision[this.position.x][this.position.y]) 
             {
-                this.position.x = util.randi(0, session.map.tile.length - 1)
-                this.position.y = util.randi(0, session.map.tile[0].length - 1)
+                this.position.x = util.randi(0, session.map.collision.length - 1)
+                this.position.y = util.randi(0, session.map.collision[0].length - 1)
             };
         }
         else

@@ -1,9 +1,20 @@
 let util = await import("./util.js")
 let DungeonGenerator = await import("./dungeon-generator.js")
 
+export class Door
+{
+    constructor(position,open = false,difficulty = 1, key = false)
+    {
+        this.position = position
+        this.difficulty = difficulty
+        this.open = open
+        this.key = key
+    }
+}
+
 export var _map = {}
 
-_map.tile = DungeonGenerator.generate({
+_map.collision = DungeonGenerator.generate({
     maxRoomSize: 15,
     minRoomSize: 0,
     padding: 0,
@@ -21,7 +32,7 @@ _map.tile = DungeonGenerator.generate({
 
 _map.door = util.newMatrix(41,61,false)
 
-_map.tile = util.matrixReplace(_map.tile,
+_map.collision = util.matrixReplace(_map.collision,
     [
         [1,0,1],
         [undefined,0,0],
@@ -32,7 +43,7 @@ _map.tile = util.matrixReplace(_map.tile,
     ]
 )
 
-_map.tile = util.matrixReplace(_map.tile,
+_map.collision = util.matrixReplace(_map.collision,
     [
         [1,0,1],
         [0,0,undefined],
@@ -43,7 +54,7 @@ _map.tile = util.matrixReplace(_map.tile,
     ]
 )
 
-_map.tile = util.matrixReplace(_map.tile,
+_map.collision = util.matrixReplace(_map.collision,
     [
         [0,0,undefined],
         [1,0,1],
@@ -54,7 +65,7 @@ _map.tile = util.matrixReplace(_map.tile,
     ]
 )
 
-_map.tile = util.matrixReplace(_map.tile,
+_map.collision = util.matrixReplace(_map.collision,
     [
         [undefined,0,0],
         [1,0,1],
@@ -65,7 +76,7 @@ _map.tile = util.matrixReplace(_map.tile,
     ]
 )
 
-_map.tile = util.matrixReplace(_map.tile,
+_map.collision = util.matrixReplace(_map.collision,
     [
         [1,undefined],
         [0,0],
@@ -78,7 +89,7 @@ _map.tile = util.matrixReplace(_map.tile,
     ]
 )
 
-_map.tile = util.matrixReplace(_map.tile,
+_map.collision = util.matrixReplace(_map.collision,
     [
         [1,0],
         [0,0],
@@ -91,7 +102,7 @@ _map.tile = util.matrixReplace(_map.tile,
     ]
 )
 
-_map.tile = util.matrixReplace(_map.tile,
+_map.collision = util.matrixReplace(_map.collision,
     [
         [0,1],
         [0,0],
@@ -104,7 +115,7 @@ _map.tile = util.matrixReplace(_map.tile,
     ]
 )
 
-_map.tile = util.matrixReplace(_map.tile,
+_map.collision = util.matrixReplace(_map.collision,
     [
         [undefined,1],
         [0,0],
@@ -117,7 +128,7 @@ _map.tile = util.matrixReplace(_map.tile,
     ]
 )
 
-_map.tile = util.matrixReplace(_map.tile,
+_map.collision = util.matrixReplace(_map.collision,
     [
         [5,1,5],
         []
@@ -128,7 +139,7 @@ _map.tile = util.matrixReplace(_map.tile,
     ]
 )
 
-_map.tile = util.matrixReplace(_map.tile,
+_map.collision = util.matrixReplace(_map.collision,
     [
         [5],
         [1],
@@ -141,7 +152,7 @@ _map.tile = util.matrixReplace(_map.tile,
     ]
 )
 
-_map.tile = util.matrixReplace(_map.tile,
+_map.collision = util.matrixReplace(_map.collision,
     [
         [1,1,1],
         [1,0,1],
@@ -161,7 +172,7 @@ let ptts =
     [[5,0,5]]
 ]
 
-_map.tile = util.matrixReplace(_map.tile,
+_map.collision = util.matrixReplace(_map.collision,
     [
         [5,0,5],
     ],
@@ -187,7 +198,7 @@ ptts =
     ],
 ]
 
-_map.tile = util.matrixReplace(_map.tile,
+_map.collision = util.matrixReplace(_map.collision,
     [
         [5],
         [0],
@@ -212,7 +223,7 @@ ptts =
     ]
 ]
 
-_map.tile = util.matrixReplace(_map.tile,
+_map.collision = util.matrixReplace(_map.collision,
     [
         [5,undefined],
         [undefined,5]
@@ -221,18 +232,8 @@ _map.tile = util.matrixReplace(_map.tile,
 )
 
 
-export class Door
-{
-    constructor(position,open = false,difficulty = 1, key = false)
-    {
-        this.position = position
-        this.difficulty = difficulty
-        this.open = open
-        this.key = key
-    }
-}
 
-_map.tile.forEach((element,x) => 
+_map.collision.forEach((element,x) => 
     {
         element.forEach((element,y) => 
             {

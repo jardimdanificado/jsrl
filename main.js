@@ -25,25 +25,27 @@ function loadImage(src)
 
 // Load all images and return a Promise that resolves when all images are loaded
 function loadImages() {
-    const imagePromises = session.tilename.map((imageName,i) => {
-        const src = 'data/img/' + imageName + '.png';
-        return loadImage(src).then((image) => {
-            session.tileset[i] = image
-            session.tilename[imageName] = i
+    const imagePromises = session.tilesetname.map((src) => {
+        return loadImage('./data/img/' + src + '.png').then((image) => {
+            session.tileset[src] = util.splitSpriteSheet(image,16,16)
         });
     });
-
     text.loadAlphabet(session,imagePromises,loadImage)
-
     return Promise.all(imagePromises);
 }
 
 function initialize()
 {
+    session.tilelink['floor_0'] = session.tileset.floor[344]
+    session.tilelink['wall_0'] = session.tileset.wall[243]
+    session.tilelink['door_open_0'] = session.tileset.door_open[8]
+    session.tilelink['door_closed_0'] = session.tileset.door_closed[8]
+    session.tilelink['creature_human_0'] = session.tileset.humanoid[2]
     const canvas = document.getElementById('canvas');
     canvas.width = session.screen.x;
     canvas.height = session.screen.y;
     session.creature[0] = creatures.human(session,'joaozinho',51)
+    
     spawndebugbuttons(session) 
 }
 
