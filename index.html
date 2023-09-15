@@ -11,7 +11,7 @@
     <canvas id="canvas"></canvas>
     <script>
         _session = {}
-        _ver = 0.027
+        _ver = 0.028
         _name = 'a festa da mosca'
     </script>
     <div class="logbox" id="scrollBox"></div>
@@ -22,7 +22,7 @@
         {
             for (let i = 0; i < content.length; i++) 
             {
-                scrollBox.textContent = _session.world.time + 's> ' + content[i] + '\n' + scrollBox.textContent
+                scrollBox.textContent = 'turn ' + _session.world.time + '> ' + content[i] + '\n' + scrollBox.textContent
             }
         }
         //_logbox('\n')

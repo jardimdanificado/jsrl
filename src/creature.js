@@ -274,6 +274,7 @@ export class Creature
                 this._skill_buffs[this.buff[i].group] += this.buff[i].value
             }
         }
+        
     }
 
     constructor(session,specime = 'human', position) 
@@ -291,8 +292,10 @@ export class Creature
         }
 
         this.specime = specime
-        this.knowntiles = util.newMatrix(session.map.collision.length,session.map.collision[0].length,false)
-        this.viewingtiles = util.newMatrix(session.map.collision.length,session.map.collision[0].length,false)
+        
+        //this.knowntiles = util.newMatrix(session.map.collision.length,session.map.collision[0].length,false)
+        //this.viewingtiles = util.newMatrix(session.map.collision.length,session.map.collision[0].length,false)
+        
         this.update()
         if (!position) 
         {
