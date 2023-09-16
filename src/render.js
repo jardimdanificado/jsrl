@@ -44,5 +44,9 @@ export function drawFrame(session)
     }
     text.printText(session,_name + ' v' + _ver,{x:0,y:canvas.height-8})
     // Add the player image
-    ctx.drawImage(session.tileset.humanoid[0], session.viewRange * session.tileSize.x, (session.viewRange) * session.tileSize.y);
+    ctx.drawImage(session.tilelink[session.style.hero], session.viewRange * session.tileSize.x, (session.viewRange) * session.tileSize.y);
+    for (const win of session.window) 
+    {
+        win.draw()
+    }
 }

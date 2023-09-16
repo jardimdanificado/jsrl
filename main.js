@@ -3,6 +3,7 @@ import * as session from "./src/session.js"
 import * as creature from "./src/creature.js"
 import { set_keydown,spawndebugbuttons } from "./src/input.js"
 import { doFrame } from "./src/frame.js"
+import { Window } from "./src/ui.js"
 import * as text from "./src/text.js"
 
 if(_session != undefined)
@@ -36,23 +37,24 @@ function loadImages() {
 
 function initialize()
 {
-    session.tilelink['floor_0'] = session.tileset.floor[344]
-    session.tilelink['wall_0'] = session.tileset.wall[243]
+    session.tilelink['floor_0'] = session.tileset.floor[11]
+    session.tilelink['wall_0'] = session.tileset.wall[1]
     session.tilelink['door_open_0'] = session.tileset.door_open[8]
     session.tilelink['door_closed_0'] = session.tileset.door_closed[8]
     session.tilelink['creature_human_0'] = session.tileset.humanoid[2]
+    session.tilelink['button_close_0'] = session.tileset.ui[0]
     const canvas = document.getElementById('canvas');
     canvas.width = session.screen.x;
     canvas.height = session.screen.y;
     session.creature[0] = creatures.human(session,'joaozinho',51)
-    
+    session.window[0] = new Window(session,canvas, "test window")
     spawndebugbuttons(session) 
 }
 
 loadImages()
     .then(() => {
-        initialize(); // Initialize after all images are loaded
-        doFrame(session); // Render the first frame immediately
+        initialize();
+        doFrame(session);
     })
     .catch((error) => {
         console.error('Failed to load images:', error);
