@@ -1,3 +1,5 @@
+import { drawFrame } from "./render.js";
+
 export function set_keydown(session) 
 {
     document.addEventListener('keydown', (event) => {
@@ -21,15 +23,12 @@ export function set_keydown(session)
 
     document.addEventListener('keyup', function(event) 
     {
-        // Verificar qual tecla foi pressionada pelo código da tecla (keyCode ou key)
         if (event.key === 'g') 
         {
-          // Ação a ser executada quando a tecla Enter é liberada
           console.log(session.creature[0]);
         }
         if (event.key === 'k') 
         {
-          // Ação a ser executada quando a tecla Enter é liberada
           console.log(session);
         }
     });      
@@ -40,33 +39,23 @@ export function defaultMouseMove(session)
     var canvas = document.getElementById('canvas');
     var ctx = canvas.getContext('2d');
 
-    canvas.addEventListener('mousemove', function (e) {
-        var rect = canvas.getBoundingClientRect(); // Obtém as coordenadas do canvas
-        var mouseX = e.clientX - rect.left; // Posição do mouse em relação ao canto esquerdo do canvas
-        var mouseY = e.clientY - rect.top; // Posição do mouse em relação ao canto superior do canvas   
-        
+    canvas.addEventListener('mousemove', function (e) 
+    {
+        var rect = canvas.getBoundingClientRect();
+        var mouseX = e.clientX - rect.left;
+        var mouseY = e.clientY - rect.top; 
     });
 }
 
-export function spawndebugbuttons(session) 
+export function defaultResize(session) 
 {
-    let button = document.createElement('button');
-    button.textContent = '↑'; 
-    button.onclick = session.creature[0].move.up; 
-    document.body.appendChild(button);
-
-    button = document.createElement('button');
-    button.textContent = '↓'; 
-    button.onclick = session.creature[0].move.down; 
-    document.body.appendChild(button);
-
-    button = document.createElement('button');
-    button.textContent = '→'; 
-    button.onclick = session.creature[0].move.right; 
-    document.body.appendChild(button);
-
-    button = document.createElement('button');
-    button.textContent = '←'; 
-    button.onclick = session.creature[0].move.left; 
-    document.body.appendChild(button);
+    window.addEventListener('resize', function (event) 
+    {
+        session.screen.x = window.innerWidth;
+        session.screen.y = window.innerHeight;
+        const canvas = document.getElementById('canvas');
+        canvas.width = session.screen.x;
+        canvas.height = session.screen.y;
+        drawFrame(session)
+    });    
 }

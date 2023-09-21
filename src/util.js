@@ -1,3 +1,4 @@
+import * as text from "./text.js"
 
 export function cloneMatrix(matrix) {
     // Check if the input is a valid matrix (2D array)
@@ -718,6 +719,28 @@ export function splitSpriteSheet(spritesheet, largura, altura, corTransparente) 
     return partes;
 }
 
+// Function to load an image as a Promise
+export function loadImage(src) 
+{
+    return new Promise((resolve, reject) => 
+    {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = reject;
+        image.src = src;
+    });
+}
 
+// Load all images and return a Promise that resolves when all images are loaded
+export function loadImages(session,tilesetnames) 
+{
+    const imagePromises = tilesetnames.map((src) => {
+        return loadImage('./data/img/' + src + '.png').then((image) => {
+            session.tileset[src] = splitSpriteSheet(image,16,16)
+        });
+    });
+    text.loadAlphabet(session,imagePromises,loadImage)
+    return Promise.all(imagePromises);
+}
 
 export function emptyfunc() {}
